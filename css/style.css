@@ -1,167 +1,50 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - RevoltFlix</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
 
-:root {
-    --bg-black: #080808;
-    --card-bg: #141414;
-    --brand-red: #E50914;
-    --brand-red-hover: #b20710;
-    --text-white: #FFFFFF;
-    --text-gray: #8c8c8c;
-    --border-color: #333333;
-}
+    <div class="hero-wrapper">
+        <div class="brand-top-left">
+            <a href="../index.html"><h1>REVOLT<span>FLIX</span></h1></a>
+        </div>
 
-body {
-    background-color: var(--bg-black);
-    color: var(--text-white);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-image: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.8)), radial-gradient(circle, #1a0202 0%, #080808 100%);
-}
+        <div class="main-box">
+            <div class="form-content">
+                <h2>Sign Up</h2>
+                
+                <div id="form-message" class="hidden"></div>
 
-.signup-container {
-    width: 100%;
-    max-width: 440px;
-    padding: 20px;
-}
+                <form id="signup-form">
+                    <div class="input-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" placeholder="Choose a username" required>
+                    </div>
 
-.logo-area {
-    text-align: center;
-    margin-bottom: 25px;
-}
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="name@example.com" required>
+                    </div>
 
-.logo-area h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
-    letter-spacing: 2px;
-    color: var(--brand-red);
-}
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="At least 6 characters" required>
+                    </div>
+                </form>
+            </div>
 
-.logo-area h1 span {
-    color: var(--text-white);
-}
+            <div class="action-buttons-bottom-right">
+                <a href="login.html" class="btn-login">Log In</a>
+                <button type="submit" form="signup-form" class="btn-signup">Sign Up</button>
+            </div>
+        </div>
+    </div>
 
-.logo-area p {
-    color: var(--text-gray);
-    font-size: 0.95rem;
-    margin-top: 5px;
-}
-
-.form-card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 40px 35px;
-    box-shadow: 0 10px 30px rgba(229, 9, 20, 0.1);
-}
-
-.form-card h2 {
-    font-size: 1.8rem;
-    margin-bottom: 25px;
-    font-weight: 700;
-}
-
-.input-group {
-    margin-bottom: 20px;
-}
-
-.input-group label {
-    display: block;
-    font-size: 0.85rem;
-    color: var(--text-gray);
-    margin-bottom: 8px;
-    font-weight: 500;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 12px 15px;
-    background-color: #222222;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    color: var(--text-white);
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.3s ease;
-}
-
-.input-group input:focus {
-    border-color: var(--brand-red);
-    box-shadow: 0 0 8px rgba(229, 9, 20, 0.4);
-    background-color: #1a1a1a;
-}
-
-.btn-submit {
-    width: 100%;
-    padding: 14px;
-    background-color: var(--brand-red);
-    color: var(--text-white);
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    margin-top: 10px;
-}
-
-.btn-submit:hover {
-    background-color: var(--brand-red-hover);
-}
-
-.btn-submit:active {
-    transform: scale(0.98);
-}
-
-.form-footer {
-    margin-top: 25px;
-    text-align: center;
-}
-
-.form-footer p {
-    font-size: 0.9rem;
-    color: var(--text-gray);
-}
-
-.form-footer a {
-    color: var(--text-white);
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.form-footer a:hover {
-    text-decoration: underline;
-    color: var(--brand-red);
-}
-
-.hidden {
-    display: none;
-}
-
-.error-message {
-    background-color: rgba(229, 9, 20, 0.2);
-    border: 1px solid var(--brand-red);
-    color: #ff9999;
-    padding: 10px;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.success-message {
-    background-color: rgba(46, 204, 113, 0.2);
-    border: 1px solid #2ecc71;
-    color: #a3e4d7;
-    padding: 10px;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    margin-bottom: 20px;
-    text-align: center;
-}
+    <script src="../js/script.js"></script>
+</body>
+</html>
