@@ -4,20 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RevoltFlix</title>
-    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --bg-black: #000000;
+            --brand-red: #E50914;
+            --brand-red-hover: #b20710;
+            --text-white: #FFFFFF;
+            --text-gray: #b3b3b3;
+            --border-color: #333333;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-wrapper {
+            position: relative;
+            width: 92vw;
+            height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .brand-top-left {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            z-index: 10;
+        }
+
+        .brand-top-left a {
+            text-decoration: none;
+        }
+
+        .brand-top-left h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.8rem;
+            letter-spacing: 2px;
+            color: var(--brand-red);
+        }
+
+        .brand-top-left h1 span {
+            color: var(--text-white);
+        }
+
+        .main-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('images/moviesbg.jpeg');
+            background-size: cover;
+            background-position: center;
+            border: 2px solid var(--brand-red);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 25px rgba(229, 9, 20, 0.3);
+            padding: 40px;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .hero-content h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+        }
+
+        .action-buttons-bottom-right {
+            position: absolute;
+            bottom: 35px;
+            right: 35px;
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .btn-login {
+            background-color: var(--text-white);
+            color: var(--bg-black);
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-login:hover {
+            background-color: #e6e6e6;
+        }
+
+        .btn-signup {
+            background-color: var(--brand-red);
+            color: var(--text-white);
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-signup:hover {
+            background-color: var(--brand-red-hover);
+        }
+
+        .btn-login:active, .btn-signup:active {
+            transform: scale(0.98);
+        }
+    </style>
 </head>
 <body>
 
     <div class="hero-wrapper">
         <div class="brand-top-left">
-            <h1>REVOLT<span>FLIX</span></h1>
+            <a href="index.html"><h1>REVOLT<span>FLIX</span></h1></a>
         </div>
 
         <div class="main-box">
             <div class="hero-content">
                 <h2>Unlimited movies, TV shows, and more.</h2>
-                <p>Watch anywhere, In your browser!</p>
+                <p>Watch anywhere. Cancel anytime.</p>
             </div>
 
             <div class="action-buttons-bottom-right">
@@ -27,5 +163,10 @@
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("RevoltFlix landing page loaded.");
+        });
+    </script>
 </body>
 </html>
