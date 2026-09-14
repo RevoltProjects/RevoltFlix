@@ -11,7 +11,6 @@
     --brand-red-hover: #b20710;
     --text-white: #FFFFFF;
     --text-gray: #b3b3b3;
-    --border-color: #333333;
 }
 
 body {
@@ -58,9 +57,6 @@ body {
     position: relative;
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('../images/moviesbg.jpeg');
-    background-size: cover;
-    background-position: center;
     border: 2px solid var(--brand-red);
     border-radius: 12px;
     display: flex;
@@ -68,6 +64,12 @@ body {
     align-items: center;
     box-shadow: 0 0 25px rgba(229, 9, 20, 0.3);
     padding: 40px;
+}
+
+.home-box {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('../moviesbg.jpeg');
+    background-size: cover;
+    background-position: center;
 }
 
 .hero-content {
@@ -85,51 +87,6 @@ body {
 .hero-content p {
     font-size: 1.2rem;
     color: var(--text-gray);
-}
-
-.form-content {
-    width: 100%;
-    max-width: 400px;
-    background-color: rgba(0, 0, 0, 0.75);
-    padding: 40px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-}
-
-.form-content h2 {
-    font-size: 2rem;
-    margin-bottom: 25px;
-    font-weight: 700;
-}
-
-.input-group {
-    margin-bottom: 20px;
-}
-
-.input-group label {
-    display: block;
-    font-size: 0.85rem;
-    color: var(--text-gray);
-    margin-bottom: 8px;
-    font-weight: 500;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 12px 15px;
-    background-color: #121212;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    color: var(--text-white);
-    font-size: 1rem;
-    outline: none;
-    transition: all 0.3s ease;
-}
-
-.input-group input:focus {
-    border-color: var(--brand-red);
-    box-shadow: 0 0 8px rgba(229, 9, 20, 0.4);
-    background-color: #1a1a1a;
 }
 
 .action-buttons-bottom-right {
@@ -162,11 +119,9 @@ body {
     background-color: var(--brand-red);
     color: var(--text-white);
     padding: 12px 24px;
-    border: none;
     border-radius: 4px;
     font-size: 0.95rem;
     font-weight: 700;
-    cursor: pointer;
     text-decoration: none;
     transition: background-color 0.2s ease, transform 0.1s ease;
     display: inline-flex;
@@ -179,30 +134,4 @@ body {
 
 .btn-login:active, .btn-signup:active {
     transform: scale(0.98);
-}
-
-.hidden {
-    display: none;
-}
-
-.error-message {
-    background-color: rgba(229, 9, 20, 0.2);
-    border: 1px solid var(--brand-red);
-    color: #ff9999;
-    padding: 10px;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.success-message {
-    background-color: rgba(46, 204, 113, 0.2);
-    border: 1px solid #2ecc71;
-    color: #a3e4d7;
-    padding: 10px;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    margin-bottom: 20px;
-    text-align: center;
 }
