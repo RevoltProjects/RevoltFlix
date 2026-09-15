@@ -204,7 +204,7 @@
             const password = document.getElementById('password').value;
 
             firebase.auth().createUserWithEmailAndPassword(email, password)
-                .then(() => { window.location.href = "../index.html"; })
+                .then(() => { window.location.href = "watching.html"; })
                 .catch((error) => { alert(error.message); });
         });
     </script>
