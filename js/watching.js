@@ -26,12 +26,22 @@ auth.onAuthStateChanged((user) => {
 lucide.createIcons();
 
 function openCreateModal() {
+
+    if (!currentUser) {
+        alert("Loading user session, please wait a second...");
+        return;
+    }
+
     db.collection('accounts').doc(currentUser.uid).get().then((doc) => {
         let profiles = doc.exists && doc.data().profiles ? doc.data().profiles : [];
         if (profiles.length >= 2) {
             alert("Maximum limit of 2 profiles reached.");
             return;
         }
+        document.getElementById('createModal').style.display = 'flex';
+    }).catch((error) => {
+        console.error("Error checking profiles:", error);
+        // Force open modal anyway if Firestore check fails temporarily
         document.getElementById('createModal').style.display = 'flex';
     });
 }
@@ -63,10 +73,7 @@ document.getElementById('profileForm').addEventListener('submit', async (e) => {
         return;
     }
 
-    const newProfile = {
-        name: name,
-        pin: pin
-    };
+    const newProfile = { name, pin };
 
     try {
         const docRef = db.collection('accounts').doc(currentUser.uid);
