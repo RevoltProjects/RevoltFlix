@@ -43,7 +43,7 @@ function closeCreateModal() {
 
 function openPinModal(profile) {
     activeProfileForPin = profile;
-    document.getElementById('pinModalTitle').innerText = `Enter PIN for ${profile.name}`;
+    document.getElementById('pinModalTitle').innerText = `Enter Pin for ${profile.name}`;
     document.getElementById('pinModal').style.display = 'flex';
 }
 
@@ -59,7 +59,7 @@ document.getElementById('profileForm').addEventListener('submit', async (e) => {
     const pin = document.getElementById('profilePin').value;
 
     if (pin.length !== 4) {
-        alert("PIN must be 4 digits.");
+        alert("Pin must be 4 digits.");
         return;
     }
 
@@ -99,7 +99,7 @@ document.getElementById('pinForm').addEventListener('submit', (e) => {
         localStorage.setItem('activeProfile', JSON.stringify(activeProfileForPin));
         window.location.href = "../index.html";
     } else {
-        alert("Incorrect PIN.");
+        alert("Incorrect Pin.");
     }
 });
 
