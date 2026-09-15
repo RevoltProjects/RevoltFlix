@@ -33,14 +33,14 @@
 
     <div class="modal-overlay" id="createModal">
         <div class="modal-box">
-            <h3>Create Profile</h3>
+            <h3>Add Profile</h3>
             <form id="profileForm">
                 <div class="input-group">
                     <label>Nickname</label>
                     <input type="text" id="profileName" required placeholder="Enter nickname">
                 </div>
                 <div class="input-group">
-                    <label>4-Digit PIN</label>
+                    <label>Pin</label>
                     <input type="password" id="profilePin" maxlength="4" pattern="\d{4}" required placeholder="••••">
                 </div>
                 <div class="modal-actions">
@@ -53,9 +53,10 @@
 
     <div class="modal-overlay" id="pinModal">
         <div class="modal-box">
-            <h3 id="pinModalTitle">Enter PIN</h3>
+            <h3 id="pinModalTitle">Enter Pin</h3>
             <form id="pinForm">
                 <div class="input-group">
+                    <label>Pin</label>
                     <input type="password" id="enteredPin" maxlength="4" pattern="\d{4}" required placeholder="••••">
                 </div>
                 <div class="modal-actions">
