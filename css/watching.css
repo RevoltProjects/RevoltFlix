@@ -132,7 +132,7 @@ body {
 }
 
 .profile-slot.filled:hover {
-    border-color: var(--text-white);
+    border-color: var(--brand-red);
 }
 
 .profile-slot.filled span {
@@ -145,7 +145,7 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.85);
     display: none;
     justify-content: center;
     align-items: center;
@@ -154,20 +154,24 @@ body {
 
 .modal-box {
     background-color: #141414;
-    border: 1px solid var(--border-color);
-    padding: 30px;
-    border-radius: 8px;
+    border: 2px solid var(--brand-red);
+    padding: 35px;
+    border-radius: 12px;
     width: 100%;
-    max-width: 380px;
+    max-width: 400px;
+    box-shadow: 0 0 25px rgba(229, 9, 20, 0.2);
 }
 
 .modal-box h3 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+    color: var(--text-white);
 }
 
 .input-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     text-align: left;
 }
 
@@ -175,17 +179,18 @@ body {
     display: block;
     font-size: 0.85rem;
     color: var(--text-gray);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
+    font-weight: 500;
 }
 
 .input-group input {
     width: 100%;
-    padding: 10px 14px;
+    padding: 12px 16px;
     background-color: #1f1f1f;
     border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: 6px;
     color: var(--text-white);
-    font-size: 0.95rem;
+    font-size: 1rem;
     outline: none;
 }
 
@@ -196,25 +201,31 @@ body {
 .modal-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 12px;
+    margin-top: 30px;
 }
 
 .btn-cancel {
     background-color: transparent;
     color: var(--text-gray);
     border: 1px solid var(--border-color);
-    padding: 8px 16px;
-    border-radius: 4px;
+    padding: 10px 20px;
+    border-radius: 6px;
     cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-cancel:hover {
+    border-color: var(--text-white);
+    color: var(--text-white);
 }
 
 .btn-save {
     background-color: var(--brand-red);
     color: var(--text-white);
     border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
+    padding: 10px 20px;
+    border-radius: 6px;
     font-weight: 700;
     cursor: pointer;
 }
