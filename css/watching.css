@@ -1,0 +1,224 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+:root {
+    --bg-black: #000000;
+    --brand-red: #E50914;
+    --brand-red-hover: #b20710;
+    --text-white: #FFFFFF;
+    --text-gray: #b3b3b3;
+    --border-color: #333333;
+}
+
+body {
+    background-color: var(--bg-black);
+    color: var(--text-white);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-wrapper {
+    position: relative;
+    width: 92vw;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.brand-top-left {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    z-index: 10;
+}
+
+.brand-top-left a {
+    text-decoration: none;
+}
+
+.brand-top-left h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    letter-spacing: 2px;
+    color: var(--brand-red);
+}
+
+.brand-top-left h1 span {
+    color: var(--text-white);
+}
+
+.main-box {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-black);
+    border: 2px solid var(--brand-red);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 25px rgba(229, 9, 20, 0.3);
+    padding: 40px;
+}
+
+.watching-container {
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+}
+
+.watching-container h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 40px;
+    color: var(--brand-red);
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+}
+
+.profiles-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.profile-slot {
+    width: 140px;
+    height: 180px;
+    background-color: #111111;
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    gap: 12px;
+}
+
+.profile-slot:hover {
+    border-color: var(--brand-red);
+    transform: translateY(-4px);
+}
+
+.plus-icon-box {
+    width: 50px;
+    height: 50px;
+    background-color: #1f1f1f;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-gray);
+}
+
+.profile-slot span {
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    font-weight: 500;
+}
+
+.profile-slot.filled {
+    border: 2px solid var(--border-color);
+    background-color: #141414;
+}
+
+.profile-slot.filled:hover {
+    border-color: var(--text-white);
+}
+
+.profile-slot.filled span {
+    color: var(--text-white);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal-box {
+    background-color: #141414;
+    border: 1px solid var(--border-color);
+    padding: 30px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 380px;
+}
+
+.modal-box h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    margin-bottom: 6px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px 14px;
+    background-color: #1f1f1f;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-white);
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: var(--brand-red);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    background-color: transparent;
+    color: var(--text-gray);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-save {
+    background-color: var(--brand-red);
+    color: var(--text-white);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-save:hover {
+    background-color: var(--brand-red-hover);
+}
