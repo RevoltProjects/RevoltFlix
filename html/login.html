@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In - RevoltFlix</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         * {
             margin: 0;
@@ -80,45 +81,71 @@
             width: 100%;
             max-width: 400px;
             background-color: #141414;
-            padding: 40px;
+            padding: 30px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
         }
 
         .form-content h2 {
-            font-size: 2rem;
-            margin-bottom: 25px;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
             font-weight: 700;
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .input-group label {
             display: block;
             font-size: 0.85rem;
             color: var(--text-gray);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 500;
         }
 
         .input-group input {
             width: 100%;
-            padding: 12px 15px;
+            padding: 10px 14px;
             background-color: #1f1f1f;
             border: 1px solid var(--border-color);
             border-radius: 4px;
             color: var(--text-white);
-            font-size: 1rem;
+            font-size: 0.95rem;
             outline: none;
-            transition: all 0.3s ease;
         }
 
         .input-group input:focus {
             border-color: var(--brand-red);
-            box-shadow: 0 0 8px rgba(229, 9, 20, 0.4);
             background-color: #262626;
+        }
+
+        .social-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-social {
+            width: 100%;
+            padding: 10px;
+            background-color: #222;
+            color: var(--text-white);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-social:hover {
+            background-color: #333;
         }
 
         .action-buttons-bottom-right {
@@ -131,42 +158,32 @@
         }
 
         .btn-login {
-            background-color: var(--text-white);
-            color: var(--bg-black);
+            background-color: var(--brand-red);
+            color: var(--text-white);
             padding: 12px 24px;
             border: none;
             border-radius: 4px;
             font-weight: 700;
             font-size: 0.95rem;
             cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            display: inline-flex;
-            align-items: center;
         }
 
         .btn-login:hover {
-            background-color: #e6e6e6;
+            background-color: var(--brand-red-hover);
         }
 
         .btn-signup {
-            background-color: var(--brand-red);
-            color: var(--text-white);
+            background-color: var(--text-white);
+            color: var(--bg-black);
             padding: 12px 24px;
             border-radius: 4px;
             font-size: 0.95rem;
             font-weight: 700;
             text-decoration: none;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            display: inline-flex;
-            align-items: center;
         }
 
         .btn-signup:hover {
-            background-color: var(--brand-red-hover);
-        }
-
-        .btn-login:active, .btn-signup:active {
-            transform: scale(0.98);
+            background-color: #e6e6e6;
         }
     </style>
 </head>
@@ -182,8 +199,8 @@
                 <h2>Log In</h2>
                 <form id="login-form">
                     <div class="input-group">
-                        <label for="email">Email or Username</label>
-                        <input type="text" id="email" placeholder="name@example.com" required>
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="name@example.com" required>
                     </div>
 
                     <div class="input-group">
@@ -191,6 +208,18 @@
                         <input type="password" id="password" placeholder="Enter your password" required>
                     </div>
                 </form>
+
+                <div class="social-buttons">
+                    <button type="button" id="google-btn" class="btn-social">
+                        <i data-lucide="globe"></i> Log in with Google
+                    </button>
+                    <button type="button" id="microsoft-btn" class="btn-social">
+                        <i data-lucide="wind"></i> Log in with Microsoft
+                    </button>
+                    <button type="button" id="phone-btn" class="btn-social">
+                        <i data-lucide="phone"></i> Log in with Phone
+                    </button>
+                </div>
             </div>
 
             <div class="action-buttons-bottom-right">
@@ -200,9 +229,48 @@
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log("Login page initialized.");
+        const firebaseConfig = {
+            apiKey: "AIzaSyDdhpsdVNY58rZCdlVoLF07850GUMyWjxI",
+            authDomain: "revoltflix-6d205.firebaseapp.com",
+            projectId: "revoltflix-6d205",
+            storageBucket: "revoltflix-6d205.firebasestorage.app",
+            messagingSenderId: "687163146166",
+            appId: "1:687163146166:web:58c21ffcb48580f0778b17"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        lucide.createIcons();
+
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then(() => { window.location.href = "../index.html"; })
+                .catch((error) => { alert(error.message); });
+        });
+
+        document.getElementById('google-btn').addEventListener('click', () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(provider)
+                .then(() => { window.location.href = "../index.html"; })
+                .catch((error) => { alert(error.message); });
+        });
+
+        document.getElementById('microsoft-btn').addEventListener('click', () => {
+            const provider = new firebase.auth.OAuthProvider('microsoft.com');
+            firebase.auth().signInWithPopup(provider)
+                .then(() => { window.location.href = "../index.html"; })
+                .catch((error) => { alert(error.message); });
+        });
+
+        document.getElementById('phone-btn').addEventListener('click', () => {
+            alert("Phone authentication requires a configured reCAPTCHA container.");
         });
     </script>
 </body>
