@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - RevoltFlix</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         * {
             margin: 0;
@@ -120,34 +119,6 @@
             background-color: #262626;
         }
 
-        .social-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .btn-social {
-            width: 100%;
-            padding: 10px;
-            background-color: #222;
-            color: var(--text-white);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: background-color 0.2s;
-        }
-
-        .btn-social:hover {
-            background-color: #333;
-        }
-
         .action-buttons-bottom-right {
             position: absolute;
             bottom: 35px;
@@ -204,18 +175,6 @@
                         <input type="password" id="password" placeholder="At least 6 characters" required>
                     </div>
                 </form>
-
-                <div class="social-buttons">
-                    <button type="button" id="google-btn" class="btn-social">
-                        <i data-lucide="globe"></i> Sign up with Google
-                    </button>
-                    <button type="button" id="microsoft-btn" class="btn-social">
-                        <i data-lucide="wind"></i> Sign up with Microsoft
-                    </button>
-                    <button type="button" id="phone-btn" class="btn-social">
-                        <i data-lucide="phone"></i> Sign up with Phone
-                    </button>
-                </div>
             </div>
 
             <div class="action-buttons-bottom-right">
@@ -239,8 +198,6 @@
 
         firebase.initializeApp(firebaseConfig);
 
-        lucide.createIcons();
-
         document.getElementById('signup-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
@@ -249,24 +206,6 @@
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then(() => { window.location.href = "../index.html"; })
                 .catch((error) => { alert(error.message); });
-        });
-
-        document.getElementById('google-btn').addEventListener('click', () => {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            firebase.auth().signInWithPopup(provider)
-                .then(() => { window.location.href = "../index.html"; })
-                .catch((error) => { alert(error.message); });
-        });
-
-        document.getElementById('microsoft-btn').addEventListener('click', () => {
-            const provider = new firebase.auth.OAuthProvider('microsoft.com');
-            firebase.auth().signInWithPopup(provider)
-                .then(() => { window.location.href = "../index.html"; })
-                .catch((error) => { alert(error.message); });
-        });
-
-        document.getElementById('phone-btn').addEventListener('click', () => {
-            alert("Phone authentication requires a configured reCAPTCHA container.");
         });
     </script>
 </body>
