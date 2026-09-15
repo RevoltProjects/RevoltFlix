@@ -119,42 +119,38 @@
             background-color: #262626;
         }
 
-        .action-buttons-bottom-right {
-            position: absolute;
-            bottom: 35px;
-            right: 35px;
-            display: flex;
-            gap: 12px;
-            z-index: 10;
-        }
-
         .btn-login {
+            width: 100%;
             background-color: var(--brand-red);
             color: var(--text-white);
-            padding: 12px 24px;
+            padding: 12px;
             border: none;
             border-radius: 4px;
-            font-weight: 700;
             font-size: 0.95rem;
+            font-weight: 700;
             cursor: pointer;
+            margin-top: 10px;
         }
 
         .btn-login:hover {
             background-color: var(--brand-red-hover);
         }
 
-        .btn-signup {
-            background-color: var(--text-white);
-            color: var(--bg-black);
-            padding: 12px 24px;
-            border-radius: 4px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            text-decoration: none;
+        .form-switch {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-gray);
         }
 
-        .btn-signup:hover {
-            background-color: #e6e6e6;
+        .form-switch a {
+            color: var(--text-white);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .form-switch a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -178,12 +174,13 @@
                         <label for="password">Password</label>
                         <input type="password" id="password" placeholder="Enter your password" required>
                     </div>
-                </form>
-            </div>
 
-            <div class="action-buttons-bottom-right">
-                <button type="submit" form="login-form" class="btn-login">Log In</button>
-                <a href="signup.html" class="btn-signup">Sign Up</a>
+                    <button type="submit" class="btn-login">Log In</button>
+                </form>
+
+                <div class="form-switch">
+                    Don't have an account? <a href="signup.html">Sign up instead</a>
+                </div>
             </div>
         </div>
     </div>
@@ -201,6 +198,12 @@
         };
 
         firebase.initializeApp(firebaseConfig);
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                window.location.href = "watching.html";
+            }
+        });
 
         document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
