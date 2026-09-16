@@ -34,6 +34,8 @@ navItems.forEach(item => {
 });
 
 const BACKEND_URL = "https://revolt-flix-backend.vercel.app/api";
+let currentMoviesData = [];
+let activeMovieId = null;
 
 async function fetchCategoryData(category, query = '') {
     const grid = document.getElementById('contentGrid');
@@ -51,15 +53,16 @@ async function fetchCategoryData(category, query = '') {
         const data = await response.json();
         
         if (category === 'movies') {
+            currentMoviesData = data;
             if (data.length === 0) {
                 grid.innerHTML = `<p class="loading-text">No movies found.</p>`;
                 return;
             }
 
             grid.innerHTML = data.map(item => `
-                <div class="movie-card" onclick="goToMoviePage(${item.id})">
-                    <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}" style="width: 100%; height: 300px; object-fit: cover;">
-                    <p style="padding: 10px; font-size: 0.9rem; font-weight: 500; text-align: center; color: #fff;">${item.title || item.name}</p>
+                <div class="movie-card" onclick="openDetailsModal(${item.id})">
+                    <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}" class="card-img">
+                    <p class="card-title">${item.title || item.name}</p>
                 </div>
             `).join('');
         } else {
@@ -70,8 +73,35 @@ async function fetchCategoryData(category, query = '') {
     }
 }
 
-function goToMoviePage(tmdbId) {
-    window.location.href = `playmovies.html?id=${tmdbId}`;
+function openDetailsModal(tmdbId) {
+    activeMovieId = tmdbId;
+    const movie = currentMoviesData.find(m => m.id == tmdbId);
+    if (!movie) return;
+
+    document.getElementById('detailTitle').innerText = movie.title || movie.name;
+    document.getElementById('detailOverview').innerText = movie.overview || "No description available for this title.";
+    document.getElementById('detailPoster').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+    
+    document.getElementById('detailsModal').style.display = 'flex';
+}
+
+function closeDetailsModal() {
+    document.getElementById('detailsModal').style.display = 'none';
+}
+
+function expandPlayerFromModal() {
+    if (!activeMovieId) return;
+    const modal = document.getElementById('playerModal');
+    const iframe = document.getElementById('videoPlayer');
+    iframe.src = `https://vidsrc.sbs/embed/movie/${activeMovieId}`;
+    modal.style.display = 'flex';
+}
+
+function closePlayer() {
+    const modal = document.getElementById('playerModal');
+    const iframe = document.getElementById('videoPlayer');
+    iframe.src = '';
+    modal.style.display = 'none';
 }
 
 const searchBtn = document.getElementById('searchBtn');
