@@ -96,9 +96,12 @@ function expandPlayerFromModal() {
     const modal = document.getElementById('playerModal');
     const iframe = document.getElementById('videoPlayer');
     
-    // Dynamically choose movie or tv endpoint for vidsrc based on current active tab
-    const mediaType = currentCategory === 'series' ? 'tv' : 'movie';
-    iframe.src = `https://vidsrc.sbs/embed/${mediaType}/${activeMediaId}`;
+    if (currentCategory === 'series') {
+        iframe.src = `https://vidsrc.sbs/embed/tv/${activeMediaId}/1/1`;
+    } else {
+        iframe.src = `https://vidsrc.sbs/embed/movie/${activeMediaId}`;
+    }
+    
     modal.style.display = 'flex';
 }
 
