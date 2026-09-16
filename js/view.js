@@ -57,7 +57,7 @@ async function fetchCategoryData(category, query = '') {
             }
 
             grid.innerHTML = data.map(item => `
-                <div class="movie-card" onclick="playMovie(${item.id})" style="background: #111; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s;">
+                <div class="movie-card" onclick="goToMoviePage(${item.id})">
                     <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}" style="width: 100%; height: 300px; object-fit: cover;">
                     <p style="padding: 10px; font-size: 0.9rem; font-weight: 500; text-align: center; color: #fff;">${item.title || item.name}</p>
                 </div>
@@ -70,18 +70,8 @@ async function fetchCategoryData(category, query = '') {
     }
 }
 
-function playMovie(tmdbId) {
-    const modal = document.getElementById('playerModal');
-    const iframe = document.getElementById('videoPlayer');
-    iframe.src = `https://vidsrc.sbs/embed/movie/${tmdbId}`;
-    modal.style.display = 'flex';
-}
-
-function closePlayer() {
-    const modal = document.getElementById('playerModal');
-    const iframe = document.getElementById('videoPlayer');
-    iframe.src = '';
-    modal.style.display = 'none';
+function goToMoviePage(tmdbId) {
+    window.location.href = `playmovies.html?id=${tmdbId}`;
 }
 
 const searchBtn = document.getElementById('searchBtn');
