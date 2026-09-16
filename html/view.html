@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse - RevoltFlix</title>
+    <link rel="stylesheet" href="../css/view.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="brand">
+                <a href="../index.html"><h1>REVOLT<span>FLIX</span></h1></a>
+            </div>
+            <nav class="nav-links">
+                <button class="nav-item active" data-category="movies">
+                    <i data-lucide="film"></i> Movies
+                </button>
+                <button class="nav-item" data-category="youtube">
+                    <i data-lucide="youtube"></i> YouTube
+                </button>
+                <button class="nav-item" data-category="music">
+                    <i data-lucide="music"></i> Music
+                </button>
+                <button class="nav-item" data-category="radio">
+                    <i data-lucide="radio"></i> Live Radio
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="profile-badge" id="profileBadge">Profile</div>
+                <a href="watching.html" class="switch-profile-btn">Switch Profile</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h2 id="categoryTitle">Movies</h2>
+                <div class="user-controls">
+                    <span id="profileNameDisplay"></span>
+                </div>
+            </header>
+            
+            <section class="content-grid" id="contentGrid">
+                <p class="loading-text">Loading content...</p>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="../js/view.js"></script>
+</body>
+</html>
