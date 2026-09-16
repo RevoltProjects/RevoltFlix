@@ -15,7 +15,7 @@ if (!activeProfile) {
 } else {
     const profile = JSON.parse(activeProfile);
     document.getElementById('profileNameDisplay').innerText = profile.name;
-    document.getElementById('profileBadge').innerText = `Profile: ${profile.name}`;
+    document.getElementById('profileBadge').innerText = profile.name;
 }
 
 lucide.createIcons();
