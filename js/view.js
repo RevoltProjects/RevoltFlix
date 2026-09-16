@@ -35,21 +35,31 @@ navItems.forEach(item => {
 
 const BACKEND_URL = "https://revolt-flix-backend.vercel.app/api";
 
-async function fetchCategoryData(category) {
+async function fetchCategoryData(category, query = '') {
     const grid = document.getElementById('contentGrid');
     grid.innerHTML = `<p class="loading-text">Loading ${category}...</p>`;
 
     try {
-        const response = await fetch(`${BACKEND_URL}/get-${category}`);
+        let endpoint = `${BACKEND_URL}/get-${category}`;
+        if (query) {
+            endpoint += `?q=${encodeURIComponent(query)}`;
+        }
+
+        const response = await fetch(endpoint);
         if (!response.ok) throw new Error("Failed to fetch data from backend.");
         
         const data = await response.json();
         
         if (category === 'movies') {
+            if (data.length === 0) {
+                grid.innerHTML = `<p class="loading-text">No movies found.</p>`;
+                return;
+            }
+
             grid.innerHTML = data.map(item => `
-                <div class="movie-card" style="background: #111; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+                <div class="movie-card" onclick="playMovie(${item.id})" style="background: #111; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.2s;">
                     <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}" style="width: 100%; height: 300px; object-fit: cover;">
-                    <p style="padding: 10px; font-size: 0.9rem; font-weight: 500; text-align: center;">${item.title || item.name}</p>
+                    <p style="padding: 10px; font-size: 0.9rem; font-weight: 500; text-align: center; color: #fff;">${item.title || item.name}</p>
                 </div>
             `).join('');
         } else {
@@ -58,6 +68,37 @@ async function fetchCategoryData(category) {
     } catch (error) {
         grid.innerHTML = `<p class="loading-text" style="color: var(--brand-red);">Error connecting to Vercel API function.</p>`;
     }
+}
+
+function playMovie(tmdbId) {
+    const modal = document.getElementById('playerModal');
+    const iframe = document.getElementById('videoPlayer');
+    iframe.src = `https://vidsrc.sbs/embed/movie/${tmdbId}`;
+    modal.style.display = 'flex';
+}
+
+function closePlayer() {
+    const modal = document.getElementById('playerModal');
+    const iframe = document.getElementById('videoPlayer');
+    iframe.src = '';
+    modal.style.display = 'none';
+}
+
+const searchBtn = document.getElementById('searchBtn');
+const searchInput = document.getElementById('searchInput');
+
+if (searchBtn && searchInput) {
+    searchBtn.addEventListener('click', () => {
+        const query = searchInput.value;
+        fetchCategoryData('movies', query);
+    });
+
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const query = searchInput.value;
+            fetchCategoryData('movies', query);
+        }
+    });
 }
 
 fetchCategoryData('movies');
