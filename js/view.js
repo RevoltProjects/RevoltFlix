@@ -33,7 +33,7 @@ navItems.forEach(item => {
     });
 });
 
-const BACKEND_URL = "https://your-backend-project.vercel.app/api";
+const BACKEND_URL = "https://revolt-flix-backend.vercel.app/api";
 
 async function fetchCategoryData(category) {
     const grid = document.getElementById('contentGrid');
@@ -45,7 +45,16 @@ async function fetchCategoryData(category) {
         
         const data = await response.json();
         
-        grid.innerHTML = `<p class="loading-text">Loaded ${data.length || 0} items for ${category}.</p>`;
+        if (category === 'movies') {
+            grid.innerHTML = data.map(item => `
+                <div class="movie-card" style="background: #111; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+                    <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}" style="width: 100%; height: 300px; object-fit: cover;">
+                    <p style="padding: 10px; font-size: 0.9rem; font-weight: 500; text-align: center;">${item.title || item.name}</p>
+                </div>
+            `).join('');
+        } else {
+            grid.innerHTML = `<p class="loading-text">Loaded ${data.length || 0} items for ${category}.</p>`;
+        }
     } catch (error) {
         grid.innerHTML = `<p class="loading-text" style="color: var(--brand-red);">Error connecting to Vercel API function.</p>`;
     }
