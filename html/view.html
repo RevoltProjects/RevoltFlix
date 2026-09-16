@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browse - RevoltFlix</title>
+    <title>RevoltFlix - Browse</title>
     <link rel="stylesheet" href="../css/view.css">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
     <div class="app-container">
         <aside class="sidebar">
-            <div class="brand">
-                <a href="../index.html"><h1>REVOLT<span>FLIX</span></h1></a>
+            <div class="sidebar-brand">
+                <h2>RevoltFlix</h2>
             </div>
-            <nav class="nav-links">
+            <nav class="sidebar-nav">
                 <button class="nav-item active" data-category="movies">
                     <i data-lucide="film"></i> Movies
                 </button>
@@ -28,28 +30,37 @@
                     <i data-lucide="radio"></i> Live Radio
                 </button>
             </nav>
-            <div class="sidebar-footer">
-                <div class="profile-badge" id="profileBadge">Profile</div>
-                <a href="watching.html" class="switch-profile-btn">Switch Profile</a>
+            <div class="sidebar-profile">
+                <span id="profileBadge">Profile</span>
             </div>
         </aside>
 
         <main class="main-content">
-            <header class="top-bar">
-                <h2 id="categoryTitle">Movies</h2>
-                <div class="user-controls">
-                    <span id="profileNameDisplay"></span>
+            <header class="content-header">
+                <h1 id="categoryTitle">Movies</h1>
+                <div class="user-profile-display">
+                    <span id="profileNameDisplay">User</span>
                 </div>
             </header>
-            
-            <section class="content-grid" id="contentGrid">
-                <p class="loading-text">Loading content...</p>
+
+            <section class="browse-section">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Search movies...">
+                    <button id="searchBtn">Search</button>
+                </div>
+
+                <div id="contentGrid" class="content-grid"></div>
             </section>
         </main>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <div id="playerModal" class="player-modal">
+        <div class="player-container">
+            <button class="close-player" onclick="closePlayer()">Close</button>
+            <iframe id="videoPlayer" sandbox="allow-scripts allow-same-origin allow-presentation" allowfullscreen></iframe>
+        </div>
+    </div>
+
     <script src="../js/view.js"></script>
 </body>
 </html>
