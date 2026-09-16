@@ -14,11 +14,12 @@ if (!activeProfile) {
     window.location.href = "watching.html";
 } else {
     const profile = JSON.parse(activeProfile);
-    document.getElementById('profileNameDisplay').innerText = profile.name;
     document.getElementById('profileBadge').innerText = profile.name;
 }
 
 lucide.createIcons();
+
+let currentCategory = 'movies';
 
 const navItems = document.querySelectorAll('.nav-item');
 navItems.forEach(item => {
@@ -26,16 +27,17 @@ navItems.forEach(item => {
         navItems.forEach(nav => nav.classList.remove('active'));
         item.classList.add('active');
 
-        const category = item.getAttribute('data-category');
+        currentCategory = item.getAttribute('data-category');
         document.getElementById('categoryTitle').innerText = item.innerText.trim();
+        document.getElementById('searchInput').placeholder = `Search ${currentCategory}...`;
         
-        fetchCategoryData(category);
+        fetchCategoryData(currentCategory);
     });
 });
 
 const BACKEND_URL = "https://revolt-flix-backend.vercel.app/api";
-let currentMoviesData = [];
-let activeMovieId = null;
+let currentMediaData = [];
+let activeMediaId = null;
 
 async function fetchCategoryData(category, query = '') {
     const grid = document.getElementById('contentGrid');
@@ -51,14 +53,14 @@ async function fetchCategoryData(category, query = '') {
         if (!response.ok) throw new Error("Failed to fetch data from backend.");
         
         const data = await response.json();
-        
-        if (category === 'movies') {
-            currentMoviesData = data;
-            if (data.length === 0) {
-                grid.innerHTML = `<p class="loading-text">No movies found.</p>`;
-                return;
-            }
+        currentMediaData = data;
 
+        if (data.length === 0) {
+            grid.innerHTML = `<p class="loading-text">No results found.</p>`;
+            return;
+        }
+
+        if (category === 'movies' || category === 'series') {
             grid.innerHTML = data.map(item => `
                 <div class="movie-card" onclick="openDetailsModal(${item.id})">
                     <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}" class="card-img">
@@ -74,13 +76,13 @@ async function fetchCategoryData(category, query = '') {
 }
 
 function openDetailsModal(tmdbId) {
-    activeMovieId = tmdbId;
-    const movie = currentMoviesData.find(m => m.id == tmdbId);
-    if (!movie) return;
+    activeMediaId = tmdbId;
+    const media = currentMediaData.find(m => m.id == tmdbId);
+    if (!media) return;
 
-    document.getElementById('detailTitle').innerText = movie.title || movie.name;
-    document.getElementById('detailOverview').innerText = movie.overview || "No description available for this title.";
-    document.getElementById('detailPoster').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+    document.getElementById('detailTitle').innerText = media.title || media.name;
+    document.getElementById('detailOverview').innerText = media.overview || "No description available for this title.";
+    document.getElementById('detailPoster').src = `https://image.tmdb.org/t/p/w500${media.poster_path}`;
     
     document.getElementById('detailsModal').style.display = 'flex';
 }
@@ -90,10 +92,13 @@ function closeDetailsModal() {
 }
 
 function expandPlayerFromModal() {
-    if (!activeMovieId) return;
+    if (!activeMediaId) return;
     const modal = document.getElementById('playerModal');
     const iframe = document.getElementById('videoPlayer');
-    iframe.src = `https://vidsrc.sbs/embed/movie/${activeMovieId}`;
+    
+    // Dynamically choose movie or tv endpoint for vidsrc based on current active tab
+    const mediaType = currentCategory === 'series' ? 'tv' : 'movie';
+    iframe.src = `https://vidsrc.sbs/embed/${mediaType}/${activeMediaId}`;
     modal.style.display = 'flex';
 }
 
@@ -110,13 +115,13 @@ const searchInput = document.getElementById('searchInput');
 if (searchBtn && searchInput) {
     searchBtn.addEventListener('click', () => {
         const query = searchInput.value;
-        fetchCategoryData('movies', query);
+        fetchCategoryData(currentCategory, query);
     });
 
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             const query = searchInput.value;
-            fetchCategoryData('movies', query);
+            fetchCategoryData(currentCategory, query);
         }
     });
 }
