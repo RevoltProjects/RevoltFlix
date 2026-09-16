@@ -84,25 +84,64 @@ function openDetailsModal(tmdbId) {
     document.getElementById('detailOverview').innerText = media.overview || "No description available for this title.";
     document.getElementById('detailPoster').src = `https://image.tmdb.org/t/p/w500${media.poster_path}`;
     
+    const actionArea = document.getElementById('actionArea');
+
+    if (currentCategory === 'movies') {
+        actionArea.innerHTML = `<button class="watch-btn" onclick="playMovie()">Watch</button>`;
+    } else if (currentCategory === 'series') {
+        actionArea.innerHTML = `
+            <div class="series-setup">
+                <div class="season-selector-wrapper">
+                    <label style="font-size: 0.85rem; color: #888; display: block; margin-bottom: 5px;">Season:</label>
+                    <select id="seasonSelect" class="styled-select" onchange="updateEpisodesList()">
+                        <option value="1">Season 1</option>
+                        <option value="2">Season 2</option>
+                        <option value="3">Season 3</option>
+                        <option value="4">Season 4</option>
+                        <option value="5">Season 5</option>
+                    </select>
+                </div>
+                <div class="episodes-wrapper">
+                    <label style="font-size: 0.85rem; color: #888; display: block; margin-bottom: 5px;">Episodes:</label>
+                    <div id="episodesGrid" class="episodes-grid"></div>
+                </div>
+            </div>
+        `;
+        updateEpisodesList();
+    }
+
     document.getElementById('detailsModal').style.display = 'flex';
+}
+
+function updateEpisodesList() {
+    const seasonNum = document.getElementById('seasonSelect').value;
+    const episodesGrid = document.getElementById('episodesGrid');
+    
+    let html = '';
+    for (let ep = 1; ep <= 12; ep++) {
+        html += `<button class="ep-box" onclick="playSeriesEpisode(${seasonNum}, ${ep})">${ep}</button>`;
+    }
+    episodesGrid.innerHTML = html;
+}
+
+function playMovie() {
+    if (!activeMediaId) return;
+    const modal = document.getElementById('playerModal');
+    const iframe = document.getElementById('videoPlayer');
+    iframe.src = `https://vidsrc.sbs/embed/movie/${activeMediaId}`;
+    modal.style.display = 'flex';
+}
+
+function playSeriesEpisode(season, episode) {
+    if (!activeMediaId) return;
+    const modal = document.getElementById('playerModal');
+    const iframe = document.getElementById('videoPlayer');
+    iframe.src = `https://vidsrc.sbs/embed/tv/${activeMediaId}/${season}/${episode}`;
+    modal.style.display = 'flex';
 }
 
 function closeDetailsModal() {
     document.getElementById('detailsModal').style.display = 'none';
-}
-
-function expandPlayerFromModal() {
-    if (!activeMediaId) return;
-    const modal = document.getElementById('playerModal');
-    const iframe = document.getElementById('videoPlayer');
-    
-    if (currentCategory === 'series') {
-        iframe.src = `https://vidsrc.sbs/embed/tv/${activeMediaId}/1/1`;
-    } else {
-        iframe.src = `https://vidsrc.sbs/embed/movie/${activeMediaId}`;
-    }
-    
-    modal.style.display = 'flex';
 }
 
 function closePlayer() {
