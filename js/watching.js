@@ -26,7 +26,6 @@ auth.onAuthStateChanged((user) => {
 lucide.createIcons();
 
 function openCreateModal() {
-
     if (!currentUser) {
         alert("Loading user session, please wait a second...");
         return;
@@ -41,7 +40,6 @@ function openCreateModal() {
         document.getElementById('createModal').style.display = 'flex';
     }).catch((error) => {
         console.error("Error checking profiles:", error);
-        // Force open modal anyway if Firestore check fails temporarily
         document.getElementById('createModal').style.display = 'flex';
     });
 }
@@ -104,7 +102,7 @@ document.getElementById('pinForm').addEventListener('submit', (e) => {
 
     if (activeProfileForPin && enteredPin === activeProfileForPin.pin) {
         localStorage.setItem('activeProfile', JSON.stringify(activeProfileForPin));
-        window.location.href = "../index.html";
+        window.location.href = "view.html";
     } else {
         alert("Incorrect Pin.");
     }
