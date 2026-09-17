@@ -14,7 +14,7 @@
     <div class="app-container">
         <aside class="sidebar">
             <div class="sidebar-brand">
-                <h2>RevoltFlix</h2>
+                <h2><span style="color: var(--brand-red);">Revolt</span><span style="color: #fff;">Flix</span></h2>
             </div>
             <nav class="sidebar-nav">
                 <button class="nav-item active" data-category="movies">
@@ -33,9 +33,12 @@
                     <i data-lucide="radio"></i> Live Radio
                 </button>
             </nav>
-            <div class="sidebar-profile">
-                <i data-lucide="user" style="color: var(--brand-red);"></i>
-                <span id="profileBadge">Profile</span>
+            <div class="sidebar-profile-container">
+                <div class="sidebar-profile">
+                    <i data-lucide="user" style="color: var(--brand-red);"></i>
+                    <span id="profileBadge">Profile</span>
+                </div>
+                <button class="switch-account-btn" onclick="switchToProfileSelect()">Switch Accounts</button>
             </div>
         </aside>
 
