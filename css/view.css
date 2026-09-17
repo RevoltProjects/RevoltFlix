@@ -31,8 +31,8 @@ body {
 }
 
 .sidebar-brand h2 {
-    color: var(--brand-red);
     margin: 0;
+    font-size: 1.6rem;
 }
 
 .sidebar-nav {
@@ -62,10 +62,16 @@ body {
     color: #fff;
 }
 
-.sidebar-profile {
+.sidebar-profile-container {
     margin-top: auto;
-    padding: 20px;
+    padding: 15px 20px;
     border-top: 1px solid #222;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-profile {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -74,6 +80,25 @@ body {
 #profileBadge {
     color: #fff;
     font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.switch-account-btn {
+    background: transparent;
+    border: 1px solid #333;
+    color: #aaa;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.switch-account-btn:hover {
+    background: var(--brand-red);
+    border-color: var(--brand-red);
+    color: #fff;
 }
 
 .main-content {
