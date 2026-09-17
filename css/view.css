@@ -38,28 +38,36 @@ body {
 .sidebar-nav {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 8px;
     padding: 0 15px;
 }
 
 .nav-item {
     background: transparent;
     border: none;
-    color: #888;
-    padding: 12px 15px;
+    color: #a0a0a0;
+    padding: 14px 16px;
     text-align: left;
-    font-size: 1rem;
+    font-size: 0.95rem;
+    font-weight: 500;
     border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 12px;
-    transition: background 0.2s, color 0.2s;
+    transition: all 0.25s ease;
 }
 
-.nav-item:hover, .nav-item.active {
-    background: var(--panel-dark);
+.nav-item:hover {
+    background: rgba(229, 9, 20, 0.12);
     color: #fff;
+    transform: translateX(4px);
+}
+
+.nav-item.active {
+    background: var(--brand-red);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(229, 9, 20, 0.35);
 }
 
 .sidebar-profile-container {
