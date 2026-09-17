@@ -19,6 +19,11 @@ if (!activeProfile) {
 
 lucide.createIcons();
 
+function switchToProfileSelect() {
+    localStorage.removeItem('activeProfile');
+    window.location.href = "watching.html";
+}
+
 let currentCategory = 'movies';
 
 const navItems = document.querySelectorAll('.nav-item');
