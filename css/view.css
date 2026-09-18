@@ -33,6 +33,16 @@ body {
 .sidebar-brand h2 {
     margin: 0;
     font-size: 1.6rem;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+}
+
+.sidebar-brand h2 .brand-revolt {
+    color: var(--brand-red);
+}
+
+.sidebar-brand h2 .brand-tube {
+    color: #ffffff;
 }
 
 .sidebar-nav {
