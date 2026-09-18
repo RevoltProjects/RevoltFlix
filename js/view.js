@@ -33,9 +33,15 @@ navItems.forEach(item => {
         item.classList.add('active');
 
         currentCategory = item.getAttribute('data-category');
-        document.getElementById('categoryTitle').innerText = item.innerText.trim();
-        document.getElementById('searchInput').placeholder = `Search ${currentCategory}...`;
         
+        const categoryTitleElement = document.getElementById('categoryTitle');
+        if (currentCategory === 'youtube') {
+            categoryTitleElement.innerHTML = '<span class="brand-revolt">Revolt</span><span class="brand-tube">Tube</span>';
+        } else {
+            categoryTitleElement.innerText = item.innerText.trim();
+        }
+
+        document.getElementById('searchInput').placeholder = `Search ${currentCategory}...`;
         fetchCategoryData(currentCategory);
     });
 });
@@ -188,7 +194,7 @@ function playYouTubeVideo(videoId) {
                 <h2 class="youtube-video-title">${title}</h2>
             </div>
             <div class="youtube-sidebar-column">
-                <h3 class="up-next-header">Up Next on RevoltTube</h3>
+                <h3 class="up-next-header">Up Next on <span style="color:var(--brand-red);">Revolt</span>Tube</h3>
                 <div class="youtube-sidebar-list">
                     ${sidebarVideos.map(item => `
                         <div class="youtube-mini-card" onclick="playYouTubeVideo('${item.id}')">
