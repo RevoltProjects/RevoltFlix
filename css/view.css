@@ -382,3 +382,104 @@ body {
     border: none;
     border-radius: 8px;
 }
+
+.youtube-watch-layout {
+    display: flex;
+    gap: 24px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.youtube-primary-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.youtube-player-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.youtube-video-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+    color: #fff;
+}
+
+.youtube-sidebar-column {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.up-next-header {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 5px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #222;
+}
+
+.youtube-sidebar-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    max-height: 70vh;
+}
+
+.youtube-mini-card {
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.youtube-mini-card:hover {
+    background: #1a1a1a;
+}
+
+.youtube-mini-thumb {
+    width: 140px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.youtube-mini-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.youtube-mini-title {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #fff;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.youtube-mini-channel {
+    font-size: 0.75rem;
+    color: #aaa;
+    margin: 0;
+}
