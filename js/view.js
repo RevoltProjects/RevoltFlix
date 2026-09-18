@@ -11,7 +11,7 @@ firebase.initializeApp(firebaseConfig);
 
 const activeProfile = localStorage.getItem('activeProfile');
 if (!activeProfile) {
-    window.location.href = "watching.html";
+    window.location.href = "html/watching.html";
 } else {
     const profile = JSON.parse(activeProfile);
     document.getElementById('profileBadge').innerText = profile.name;
@@ -21,7 +21,7 @@ lucide.createIcons();
 
 function switchToProfileSelect() {
     localStorage.removeItem('activeProfile');
-    window.location.href = "watching.html";
+    window.location.href = "html/watching.html";
 }
 
 let currentCategory = 'movies';
@@ -46,6 +46,18 @@ let activeMediaId = null;
 
 async function fetchCategoryData(category, query = '') {
     const grid = document.getElementById('contentGrid');
+
+    if (category === 'youtube' && !query) {
+        grid.innerHTML = `
+            <div class="youtube-placeholder" style="grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 50vh; text-align: center; color: #888; gap: 15px;">
+                <i data-lucide="search" style="width: 48px; height: 48px; color: var(--brand-red);"></i>
+                <p style="font-size: 1.2rem; font-weight: 500; margin: 0; color: #fff;">Look for any youtube video Via RevoltFlix's SearchBar.</p>
+            </div>
+        `;
+        lucide.createIcons();
+        return;
+    }
+
     grid.innerHTML = `<p class="loading-text">Loading ${category}...</p>`;
 
     try {
@@ -70,6 +82,13 @@ async function fetchCategoryData(category, query = '') {
                 <div class="movie-card" onclick="openDetailsModal(${item.id})">
                     <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}" class="card-img">
                     <p class="card-title">${item.title || item.name}</p>
+                </div>
+            `).join('');
+        } else if (category === 'youtube') {
+            grid.innerHTML = data.map(item => `
+                <div class="movie-card" onclick="playYouTubeVideo('${item.id}')">
+                    <img src="${item.poster_path}" alt="${item.title}" class="card-img">
+                    <p class="card-title">${item.title}</p>
                 </div>
             `).join('');
         } else {
@@ -132,16 +151,58 @@ function updateEpisodesList() {
 function playMovie() {
     if (!activeMediaId) return;
     const modal = document.getElementById('playerModal');
-    const iframe = document.getElementById('videoPlayer');
-    iframe.src = `https://vidsrc.sbs/embed/movie/${activeMediaId}`;
+    const container = modal.querySelector('.player-frame-container');
+    container.innerHTML = `
+        <button class="close-player-btn" onclick="closePlayer()">Close</button>
+        <iframe id="videoPlayer" class="video-iframe" src="https://vidsrc.sbs/embed/movie/${activeMediaId}" sandbox="allow-scripts allow-same-origin allow-presentation" allowfullscreen></iframe>
+    `;
     modal.style.display = 'flex';
 }
 
 function playSeriesEpisode(season, episode) {
     if (!activeMediaId) return;
     const modal = document.getElementById('playerModal');
-    const iframe = document.getElementById('videoPlayer');
-    iframe.src = `https://vidsrc.sbs/embed/tv/${activeMediaId}/${season}/${episode}`;
+    const container = modal.querySelector('.player-frame-container');
+    container.innerHTML = `
+        <button class="close-player-btn" onclick="closePlayer()">Close</button>
+        <iframe id="videoPlayer" class="video-iframe" src="https://vidsrc.sbs/embed/tv/${activeMediaId}/${season}/${episode}" sandbox="allow-scripts allow-same-origin allow-presentation" allowfullscreen></iframe>
+    `;
+    modal.style.display = 'flex';
+}
+
+function playYouTubeVideo(videoId) {
+    const video = currentMediaData.find(m => m.id === videoId);
+    const title = video ? video.title : "YouTube Video";
+    const sidebarVideos = currentMediaData.filter(m => m.id !== videoId);
+
+    const modal = document.getElementById('playerModal');
+    const container = modal.querySelector('.player-frame-container');
+    
+    container.innerHTML = `
+        <button class="close-player-btn" onclick="closePlayer()">Close</button>
+        <div class="youtube-watch-layout">
+            <div class="youtube-primary-column">
+                <div class="youtube-player-wrapper">
+                    <iframe id="videoPlayer" class="video-iframe" src="https://www.youtube.com/embed/${videoId}?autoplay=1" sandbox="allow-scripts allow-same-origin allow-presentation" allowfullscreen></iframe>
+                </div>
+                <h2 class="youtube-video-title">${title}</h2>
+            </div>
+            <div class="youtube-sidebar-column">
+                <h3 class="up-next-header">Up Next on RevoltTube</h3>
+                <div class="youtube-sidebar-list">
+                    ${sidebarVideos.map(item => `
+                        <div class="youtube-mini-card" onclick="playYouTubeVideo('${item.id}')">
+                            <img src="${item.poster_path}" alt="${item.title}" class="youtube-mini-thumb">
+                            <div class="youtube-mini-info">
+                                <p class="youtube-mini-title">${item.title}</p>
+                                <p class="youtube-mini-channel">${item.channelTitle || ''}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `;
     modal.style.display = 'flex';
 }
 
@@ -151,8 +212,11 @@ function closeDetailsModal() {
 
 function closePlayer() {
     const modal = document.getElementById('playerModal');
-    const iframe = document.getElementById('videoPlayer');
-    iframe.src = '';
+    const container = modal.querySelector('.player-frame-container');
+    container.innerHTML = `
+        <button class="close-player-btn" onclick="closePlayer()">Close</button>
+        <iframe id="videoPlayer" class="video-iframe" sandbox="allow-scripts allow-same-origin allow-presentation" allowfullscreen></iframe>
+    `;
     modal.style.display = 'none';
 }
 
