@@ -6,17 +6,17 @@
     <title>RevoltFlix - Browse</title>
     <link rel="stylesheet" href="../css/view.css">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 </head>
 <body>
+
     <div class="app-container">
         <aside class="sidebar">
             <div class="sidebar-brand">
-                <h2><span style="color: var(--brand-red);">Revolt</span><span style="color: #fff;">Flix</span></h2>
+                <h2>Revolt<span style="color:var(--brand-red);">Flix</span></h2>
             </div>
-            <nav class="sidebar-nav">
+            <div class="sidebar-nav">
                 <button class="nav-item active" data-category="movies">
                     <i data-lucide="film"></i> Movies
                 </button>
@@ -24,7 +24,7 @@
                     <i data-lucide="tv"></i> Series
                 </button>
                 <button class="nav-item" data-category="youtube">
-                    <i data-lucide="video"></i> YouTube
+                    <i data-lucide="youtube"></i> <span class="brand-revolt">Revolt</span><span class="brand-tube">Tube</span>
                 </button>
                 <button class="nav-item" data-category="music">
                     <i data-lucide="music"></i> Music
@@ -32,29 +32,33 @@
                 <button class="nav-item" data-category="radio">
                     <i data-lucide="radio"></i> Live Radio
                 </button>
-            </nav>
+            </div>
             <div class="sidebar-profile-container">
                 <div class="sidebar-profile">
-                    <i data-lucide="user" style="color: var(--brand-red);"></i>
+                    <i data-lucide="user" style="width: 20px; height: 20px; color: var(--brand-red);"></i>
                     <span id="profileBadge">Profile</span>
                 </div>
-                <button class="switch-account-btn" onclick="switchToProfileSelect()">Switch Accounts</button>
+                <button class="switch-account-btn" onclick="switchToProfileSelect()">Switch Profile</button>
             </div>
         </aside>
 
         <main class="main-content">
-            <header class="content-header">
-                <h1 id="categoryTitle">Movies</h1>
-            </header>
+            <div class="content-header">
+                <h1 id="categoryTitle" style="margin: 0; font-size: 2rem;">Movies</h1>
+            </div>
 
-            <section class="browse-section">
-                <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Search...">
-                    <button id="searchBtn">Search</button>
-                </div>
+            <div id="musicSwitcherContainer" style="display: none; gap: 10px; margin-bottom: 20px;">
+                <button class="rounded-switcher-btn active" data-provider="jamendo" onclick="switchMusicProvider('jamendo')">Jamendo</button>
+                <button class="rounded-switcher-btn" data-provider="deezer" onclick="switchMusicProvider('deezer')">Deezer</button>
+            </div>
 
-                <div id="contentGrid" class="content-grid"></div>
-            </section>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search movies...">
+                <button id="searchBtn">Search</button>
+            </div>
+
+            <div id="contentGrid" class="content-grid">
+            </div>
         </main>
     </div>
 
@@ -62,9 +66,9 @@
         <div class="details-container">
             <button class="close-details" onclick="closeDetailsModal()">Back</button>
             <div class="details-box">
-                <img id="detailPoster" class="poster-img" src="" alt="Poster">
+                <img id="detailPoster" src="" alt="Poster" class="poster-img">
                 <div class="info-box">
-                    <h1 id="detailTitle" class="movie-title">Loading...</h1>
+                    <h2 id="detailTitle" class="movie-title"></h2>
                     <p id="detailOverview" class="movie-overview"></p>
                     <div id="actionArea"></div>
                 </div>
