@@ -25,6 +25,7 @@ function switchToProfileSelect() {
 }
 
 let currentCategory = 'movies';
+const audioDock = document.getElementById('audioDock');
 
 const navItems = document.querySelectorAll('.nav-item');
 navItems.forEach(item => {
@@ -43,14 +44,23 @@ navItems.forEach(item => {
 
         const switcherContainer = document.getElementById('musicSwitcherContainer');
         const searchInput = document.getElementById('searchInput');
+        const grid = document.getElementById('contentGrid');
 
         if (currentCategory === 'music') {
+            audioDock.style.display = 'flex';
             switcherContainer.style.display = 'flex';
-            searchInput.placeholder = "Search music";
+            searchInput.placeholder = "Search music...";
+            grid.style.display = 'flex';
+            grid.style.flexDirection = 'column';
+            grid.style.gap = '8px';
             fetchMusicData('jamendo');
         } else {
+            audioDock.style.display = 'none';
             switcherContainer.style.display = 'none';
             searchInput.placeholder = `Search ${currentCategory}...`;
+            grid.style.display = 'grid';
+            grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
+            grid.style.gap = '20px';
             fetchCategoryData(currentCategory);
         }
     });
@@ -78,11 +88,6 @@ async function fetchMusicData(provider, query = '') {
 
     if (provider === 'deezer') {
         grid.innerHTML = `<p class="loading-text">No data available for Deezer yet.</p>`;
-        return;
-    }
-
-    if (provider === 'jamendo' && !query) {
-        fetchCategoryData('jamendo', '');
         return;
     }
 
@@ -131,10 +136,7 @@ async function fetchCategoryData(category, query = '') {
             grid.innerHTML = data.map(item => `
                 <div class="movie-card" onclick="openDetailsModal(${item.id})">
                     <div class="card-img-wrapper">
-                        <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}" class="card-img">
-                        <div class="card-overlay">
-                            <p class="card-overview-text">${item.overview || "No description available."}</p>
-                        </div>
+                        <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${(item.title || item.name || '').replace(/"/g, '&quot;')}" class="card-img">
                     </div>
                     <p class="card-title">${item.title || item.name}</p>
                 </div>
@@ -143,41 +145,32 @@ async function fetchCategoryData(category, query = '') {
             grid.innerHTML = data.map(item => `
                 <div class="movie-card" onclick="playYouTubeVideo('${item.id}')">
                     <div class="card-img-wrapper">
-                        <img src="${item.poster_path}" alt="${item.title}" class="card-img">
+                        <img src="${item.poster_path}" alt="${(item.title || '').replace(/"/g, '&quot;')}" class="card-img">
                     </div>
                     <p class="card-title">${item.title}</p>
                 </div>
             `).join('');
         } else if (category === 'jamendo') {
-            grid.innerHTML = data.map(item => `
-                <div class="movie-card" onclick="openMusicDetails('${item.id}')">
-                    <div class="card-img-wrapper">
-                        <img src="${item.poster_path}" alt="${item.title}" class="card-img">
+            grid.innerHTML = data.map((item, index) => {
+                const safeTitle = (item.title || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const safeArtist = (item.artist || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                return `
+                    <div class="music-track-row" onclick="playJamendoTrack('${item.audio_url}', '${safeTitle}', '${safeArtist}', '${item.poster_path}')">
+                        <span class="track-number">${index + 1}</span>
+                        <img src="${item.poster_path}" alt="Cover" class="track-cover">
+                        <div class="track-info">
+                            <p class="track-title">${item.title}</p>
+                            <p class="track-artist">${item.artist}</p>
+                        </div>
                     </div>
-                    <p class="card-title">${item.title} - ${item.artist}</p>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         } else {
             grid.innerHTML = `<p class="loading-text">Loaded ${data.length || 0} items for ${category}.</p>`;
         }
     } catch (error) {
-        grid.innerHTML = `<p class="loading-text" style="color: var(--brand-red);">Error connecting to Vercel API function.</p>`;
+        grid.innerHTML = `<p class="loading-text" style="color: var(--brand-red);">Error connecting to API.</p>`;
     }
-}
-
-function openMusicDetails(trackId) {
-    activeMediaId = trackId;
-    const track = currentMediaData.find(m => m.id == trackId);
-    if (!track) return;
-
-    document.getElementById('detailTitle').innerText = track.title;
-    document.getElementById('detailOverview').innerText = `Artist: ${track.artist}\nStreamable track via Jamendo Music. Click listen to start playback.`;
-    document.getElementById('detailPoster').src = track.poster_path;
-    
-    const actionArea = document.getElementById('actionArea');
-    actionArea.innerHTML = `<button class="watch-btn" onclick="playJamendoTrack('${track.audio_url}', '${track.title.replace(/'/g, "\\'")}', '${track.artist.replace(/'/g, "\\'")}', '${track.poster_path}')">Listen</button>`;
-
-    document.getElementById('detailsModal').style.display = 'flex';
 }
 
 function openDetailsModal(tmdbId) {
@@ -194,39 +187,10 @@ function openDetailsModal(tmdbId) {
     if (currentCategory === 'movies') {
         actionArea.innerHTML = `<button class="watch-btn" onclick="playMovie()">Watch</button>`;
     } else if (currentCategory === 'series') {
-        actionArea.innerHTML = `
-            <div class="series-setup">
-                <div class="season-selector-wrapper">
-                    <label style="font-size: 0.85rem; color: #888; display: block; margin-bottom: 5px;">Season:</label>
-                    <select id="seasonSelect" class="styled-select" onchange="updateEpisodesList()">
-                        <option value="1">Season 1</option>
-                        <option value="2">Season 2</option>
-                        <option value="3">Season 3</option>
-                        <option value="4">Season 4</option>
-                        <option value="5">Season 5</option>
-                    </select>
-                </div>
-                <div class="episodes-wrapper">
-                    <label style="font-size: 0.85rem; color: #888; display: block; margin-bottom: 5px;">Episodes:</label>
-                    <div id="episodesGrid" class="episodes-grid"></div>
-                </div>
-            </div>
-        `;
-        updateEpisodesList();
+        actionArea.innerHTML = `<button class="watch-btn" onclick="playSeriesEpisode(1, 1)">Watch S1 E1</button>`;
     }
 
     document.getElementById('detailsModal').style.display = 'flex';
-}
-
-function updateEpisodesList() {
-    const seasonNum = document.getElementById('seasonSelect').value;
-    const episodesGrid = document.getElementById('episodesGrid');
-    
-    let html = '';
-    for (let ep = 1; ep <= 12; ep++) {
-        html += `<button class="ep-box" onclick="playSeriesEpisode(${seasonNum}, ${ep})">${ep}</button>`;
-    }
-    episodesGrid.innerHTML = html;
 }
 
 function playMovie() {
@@ -254,8 +218,7 @@ function playSeriesEpisode(season, episode) {
 function playYouTubeVideo(videoId) {
     const video = currentMediaData.find(m => m.id === videoId);
     const title = video ? video.title : "YouTube Video";
-    const sidebarVideos = currentMediaData.filter(m => m.id !== videoId);
-
+    
     const modal = document.getElementById('playerModal');
     const container = modal.querySelector('.player-frame-container');
     
@@ -268,20 +231,6 @@ function playYouTubeVideo(videoId) {
                 </div>
                 <h2 class="youtube-video-title">${title}</h2>
             </div>
-            <div class="youtube-sidebar-column">
-                <h3 class="up-next-header">Up Next on <span style="color:var(--brand-red);">Revolt</span>Tube</h3>
-                <div class="youtube-sidebar-list">
-                    ${sidebarVideos.map(item => `
-                        <div class="youtube-mini-card" onclick="playYouTubeVideo('${item.id}')">
-                            <img src="${item.poster_path}" alt="${item.title}" class="youtube-mini-thumb">
-                            <div class="youtube-mini-info">
-                                <p class="youtube-mini-title">${item.title}</p>
-                                <p class="youtube-mini-channel">${item.channelTitle || ''}</p>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
         </div>
     `;
     modal.style.display = 'flex';
@@ -292,13 +241,7 @@ function closeDetailsModal() {
 }
 
 function closePlayer() {
-    const modal = document.getElementById('playerModal');
-    const container = modal.querySelector('.player-frame-container');
-    container.innerHTML = `
-        <button class="close-player-btn" onclick="closePlayer()">Close</button>
-        <iframe id="videoPlayer" class="video-iframe" sandbox="allow-scripts allow-same-origin allow-presentation" allowfullscreen></iframe>
-    `;
-    modal.style.display = 'none';
+    document.getElementById('playerModal').style.display = 'none';
 }
 
 const searchBtn = document.getElementById('searchBtn');
@@ -307,21 +250,12 @@ const searchInput = document.getElementById('searchInput');
 if (searchBtn && searchInput) {
     searchBtn.addEventListener('click', () => {
         const query = searchInput.value;
-        if (currentCategory === 'music') {
-            fetchMusicData(currentMusicProvider, query);
-        } else {
-            fetchCategoryData(currentCategory, query);
-        }
+        currentCategory === 'music' ? fetchMusicData(currentMusicProvider, query) : fetchCategoryData(currentCategory, query);
     });
-
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             const query = searchInput.value;
-            if (currentCategory === 'music') {
-                fetchMusicData(currentMusicProvider, query);
-            } else {
-                fetchCategoryData(currentCategory, query);
-            }
+            currentCategory === 'music' ? fetchMusicData(currentMusicProvider, query) : fetchCategoryData(currentCategory, query);
         }
     });
 }
