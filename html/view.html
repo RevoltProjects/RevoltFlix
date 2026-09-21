@@ -12,6 +12,7 @@
 <body>
 
     <div class="app-container">
+
         <aside class="sidebar">
             <div class="sidebar-brand">
                 <h2>Revolt<span style="color:var(--brand-red);">Flix</span></h2>
@@ -41,11 +42,11 @@
                 <button class="switch-account-btn" onclick="switchToProfileSelect()">Switch Profile</button>
             </div>
         </aside>
-
         <main class="main-content">
             <div class="content-header">
                 <h1 id="categoryTitle" style="margin: 0; font-size: 2rem;">Movies</h1>
             </div>
+
 
             <div id="musicSwitcherContainer" style="display: none; gap: 10px; margin-bottom: 20px;">
                 <button class="rounded-switcher-btn active" data-provider="jamendo" onclick="switchMusicProvider('jamendo')">Jamendo</button>
@@ -58,9 +59,11 @@
             </div>
 
             <div id="contentGrid" class="content-grid">
+
             </div>
         </main>
     </div>
+
 
     <div id="detailsModal" class="details-modal">
         <div class="details-container">
@@ -75,6 +78,7 @@
             </div>
         </div>
     </div>
+
 
     <div id="playerModal" class="player-modal">
         <div class="player-frame-container">
