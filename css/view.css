@@ -37,14 +37,6 @@ body {
     letter-spacing: 1px;
 }
 
-.sidebar-brand h2 .brand-revolt {
-    color: var(--brand-red);
-}
-
-.sidebar-brand h2 .brand-tube {
-    color: #ffffff;
-}
-
 .sidebar-nav {
     display: flex;
     flex-direction: column;
@@ -125,6 +117,7 @@ body {
     flex-direction: column;
     padding: 30px;
     overflow-y: hidden;
+    padding-bottom: 100px;
 }
 
 .content-header {
@@ -202,41 +195,87 @@ body {
 
 .content-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 20px;
     overflow-y: auto;
-    max-height: 75vh;
+    max-height: 70vh;
     padding-right: 10px;
 }
 
 .movie-card {
-    background: #111;
+    background: #141414;
     border-radius: 8px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    border: 1px solid #222;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .movie-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(229, 9, 20, 0.3);
+    border-color: var(--brand-red);
+}
+
+.card-img-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
 }
 
 .card-img {
     width: 100%;
-    height: 300px;
+    height: 100%;
     object-fit: cover;
 }
 
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    padding: 15px;
+    box-sizing: border-box;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.movie-card:hover .card-overlay {
+    opacity: 1;
+}
+
+.card-overview-text {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: #ddd;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
 .card-title {
-    padding: 10px;
+    padding: 12px 10px;
     font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: 600;
     text-align: center;
     color: #fff;
+    background: #141414;
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .loading-text {
@@ -516,4 +555,80 @@ body {
     font-size: 0.75rem;
     color: #aaa;
     margin: 0;
+}
+
+.audio-dock {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: #111;
+    border-top: 1px solid #222;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    box-sizing: border-box;
+    z-index: 1100;
+}
+
+.audio-dock-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.dock-thumb {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.dock-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dock-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.dock-artist {
+    font-size: 0.8rem;
+    color: #888;
+    margin: 0;
+}
+
+.audio-dock-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.dock-ctrl-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.2s, color 0.2s;
+}
+
+.dock-ctrl-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--brand-red);
+}
+
+.dock-ctrl-btn.active-loop {
+    color: var(--brand-red);
 }
