@@ -36,7 +36,7 @@ navItems.forEach(item => {
         
         const categoryTitleElement = document.getElementById('categoryTitle');
         if (currentCategory === 'youtube') {
-            categoryTitleElement.innerHTML = '<span class="brand-revolt">Revolt</span><span class="brand-tube">Tube</span>';
+            categoryTitleElement.innerHTML = '<span style="color:var(--brand-red);">Revolt</span>Tube';
         } else {
             categoryTitleElement.innerText = item.innerText.trim();
         }
