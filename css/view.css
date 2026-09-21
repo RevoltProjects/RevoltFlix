@@ -134,6 +134,30 @@ body {
     margin-bottom: 25px;
 }
 
+.rounded-switcher-btn {
+    background: #1e1e1e;
+    border: 1px solid #333;
+    color: #aaa;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.rounded-switcher-btn:hover {
+    background: #333;
+    color: #fff;
+}
+
+.rounded-switcher-btn.active {
+    background: var(--brand-red);
+    border-color: var(--brand-red);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(229, 9, 20, 0.35);
+}
+
 .search-container {
     display: flex;
     gap: 10px;
