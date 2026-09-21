@@ -44,7 +44,7 @@
 
         <main class="main-content">
             <div class="content-header">
-                <h1 id="categoryTitle" style="margin: 0; font-size: 2rem;">Movies</h1>
+                <h1 id="categoryTitle">Movies</h1>
             </div>
 
             <div id="musicSwitcherContainer" style="display: none; gap: 10px; margin-bottom: 20px;">
@@ -54,17 +54,19 @@
 
             <div class="search-container">
                 <input type="text" id="searchInput" placeholder="Search movies...">
-                <button id="searchBtn">Search</button>
+                <button id="searchBtn">
+                    <i data-lucide="search" style="width: 18px; height: 18px;"></i>
+                    <span>Search</span>
+                </button>
             </div>
 
-            <div id="contentGrid" class="content-grid">
-            </div>
+            <div id="contentGrid" class="content-grid"></div>
         </main>
     </div>
 
     <div id="detailsModal" class="details-modal">
         <div class="details-container">
-            <button class="close-details" onclick="closeDetailsModal()">Back</button>
+            <button class="close-details" onclick="closeDetailsModal()">&larr; Back</button>
             <div class="details-box">
                 <img id="detailPoster" src="" alt="Poster" class="poster-img">
                 <div class="info-box">
