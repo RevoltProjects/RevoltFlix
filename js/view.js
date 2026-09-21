@@ -42,12 +42,15 @@ navItems.forEach(item => {
         }
 
         const switcherContainer = document.getElementById('musicSwitcherContainer');
+        const searchInput = document.getElementById('searchInput');
+
         if (currentCategory === 'music') {
             switcherContainer.style.display = 'flex';
+            searchInput.placeholder = "Search music";
             fetchMusicData('jamendo');
         } else {
             switcherContainer.style.display = 'none';
-            document.getElementById('searchInput').placeholder = `Search ${currentCategory}...`;
+            searchInput.placeholder = `Search ${currentCategory}...`;
             fetchCategoryData(currentCategory);
         }
     });
@@ -127,21 +130,30 @@ async function fetchCategoryData(category, query = '') {
         if (category === 'movies' || category === 'series') {
             grid.innerHTML = data.map(item => `
                 <div class="movie-card" onclick="openDetailsModal(${item.id})">
-                    <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}" class="card-img">
+                    <div class="card-img-wrapper">
+                        <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}" class="card-img">
+                        <div class="card-overlay">
+                            <p class="card-overview-text">${item.overview || "No description available."}</p>
+                        </div>
+                    </div>
                     <p class="card-title">${item.title || item.name}</p>
                 </div>
             `).join('');
         } else if (category === 'youtube') {
             grid.innerHTML = data.map(item => `
                 <div class="movie-card" onclick="playYouTubeVideo('${item.id}')">
-                    <img src="${item.poster_path}" alt="${item.title}" class="card-img">
+                    <div class="card-img-wrapper">
+                        <img src="${item.poster_path}" alt="${item.title}" class="card-img">
+                    </div>
                     <p class="card-title">${item.title}</p>
                 </div>
             `).join('');
         } else if (category === 'jamendo') {
             grid.innerHTML = data.map(item => `
                 <div class="movie-card" onclick="openMusicDetails('${item.id}')">
-                    <img src="${item.poster_path}" alt="${item.title}" class="card-img">
+                    <div class="card-img-wrapper">
+                        <img src="${item.poster_path}" alt="${item.title}" class="card-img">
+                    </div>
                     <p class="card-title">${item.title} - ${item.artist}</p>
                 </div>
             `).join('');
@@ -163,25 +175,9 @@ function openMusicDetails(trackId) {
     document.getElementById('detailPoster').src = track.poster_path;
     
     const actionArea = document.getElementById('actionArea');
-    actionArea.innerHTML = `<button class="watch-btn" onclick="playJamendoTrack('${track.audio_url}')">Listen</button>`;
+    actionArea.innerHTML = `<button class="watch-btn" onclick="playJamendoTrack('${track.audio_url}', '${track.title.replace(/'/g, "\\'")}', '${track.artist.replace(/'/g, "\\'")}', '${track.poster_path}')">Listen</button>`;
 
     document.getElementById('detailsModal').style.display = 'flex';
-}
-
-function playJamendoTrack(audioUrl) {
-    const modal = document.getElementById('playerModal');
-    const container = modal.querySelector('.player-frame-container');
-    container.innerHTML = `
-        <button class="close-player-btn" onclick="closePlayer()">Close</button>
-        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 20px;">
-            <h2 style="color: #fff;">Now Playing Audio</h2>
-            <audio controls autoplay style="width: 80%;">
-                <source src="${audioUrl}" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </div>
-    `;
-    modal.style.display = 'flex';
 }
 
 function openDetailsModal(tmdbId) {
