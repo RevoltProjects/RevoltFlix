@@ -83,7 +83,8 @@
         </div>
     </div>
 
-    <div id="audioDock" class="audio-dock">
+    <!-- Spotify-style Audio Dock -->
+    <div id="audioDock" class="audio-dock" style="display: none;">
         <div class="audio-dock-info">
             <img id="dockThumb" src="" alt="" class="dock-thumb">
             <div class="dock-text">
@@ -91,10 +92,27 @@
                 <p id="dockArtist" class="dock-artist">-</p>
             </div>
         </div>
-        <div class="audio-dock-controls">
-            <button class="dock-ctrl-btn" onclick="togglePlayState()"><i id="dockPlayIcon" data-lucide="play"></i></button>
-            <button class="dock-ctrl-btn" onclick="toggleLoopState()"><i data-lucide="repeat" id="dockLoopIcon"></i></button>
+        
+        <div class="audio-dock-center">
+            <div class="audio-dock-controls">
+                <button class="dock-ctrl-btn" onclick="toggleShuffle()"><i data-lucide="shuffle" id="dockShuffleIcon"></i></button>
+                <button class="dock-ctrl-btn" onclick="playPrevious()"><i data-lucide="skip-back"></i></button>
+                <button class="dock-ctrl-btn play-btn" onclick="togglePlayState()"><i id="dockPlayIcon" data-lucide="play"></i></button>
+                <button class="dock-ctrl-btn" onclick="playNext()"><i data-lucide="skip-forward"></i></button>
+                <button class="dock-ctrl-btn" onclick="toggleLoopState()"><i data-lucide="repeat" id="dockLoopIcon"></i></button>
+            </div>
+            <div class="audio-progress">
+                <span id="currentTime">0:00</span>
+                <input type="range" id="progressBar" class="progress-slider" value="0" min="0" max="100">
+                <span id="totalTime">0:00</span>
+            </div>
         </div>
+
+        <div class="audio-dock-right">
+            <i data-lucide="volume-2" class="volume-icon"></i>
+            <input type="range" id="volumeBar" class="progress-slider volume-slider" value="100" min="0" max="100">
+        </div>
+        
         <audio id="globalAudioElement"></audio>
     </div>
 
