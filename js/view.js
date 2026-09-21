@@ -41,14 +41,50 @@ navItems.forEach(item => {
             categoryTitleElement.innerText = item.innerText.trim();
         }
 
-        document.getElementById('searchInput').placeholder = `Search ${currentCategory}...`;
-        fetchCategoryData(currentCategory);
+        const switcherContainer = document.getElementById('musicSwitcherContainer');
+        if (currentCategory === 'music') {
+            switcherContainer.style.display = 'flex';
+            fetchMusicData('jamendo');
+        } else {
+            switcherContainer.style.display = 'none';
+            document.getElementById('searchInput').placeholder = `Search ${currentCategory}...`;
+            fetchCategoryData(currentCategory);
+        }
     });
 });
 
 const BACKEND_URL = "https://revolt-flix-backend.vercel.app/api";
 let currentMediaData = [];
 let activeMediaId = null;
+let currentMusicProvider = 'jamendo';
+
+function switchMusicProvider(provider) {
+    currentMusicProvider = provider;
+    document.querySelectorAll('.rounded-switcher-btn').forEach(btn => {
+        if (btn.getAttribute('data-provider') === provider) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    fetchMusicData(provider);
+}
+
+async function fetchMusicData(provider, query = '') {
+    const grid = document.getElementById('contentGrid');
+
+    if (provider === 'deezer') {
+        grid.innerHTML = `<p class="loading-text">No data available for Deezer yet.</p>`;
+        return;
+    }
+
+    if (provider === 'jamendo' && !query) {
+        fetchCategoryData('jamendo', '');
+        return;
+    }
+
+    fetchCategoryData('jamendo', query);
+}
 
 async function fetchCategoryData(category, query = '') {
     const grid = document.getElementById('contentGrid');
@@ -61,6 +97,11 @@ async function fetchCategoryData(category, query = '') {
             </div>
         `;
         lucide.createIcons();
+        return;
+    }
+
+    if (category === 'music') {
+        fetchMusicData(currentMusicProvider, query);
         return;
     }
 
@@ -97,12 +138,50 @@ async function fetchCategoryData(category, query = '') {
                     <p class="card-title">${item.title}</p>
                 </div>
             `).join('');
+        } else if (category === 'jamendo') {
+            grid.innerHTML = data.map(item => `
+                <div class="movie-card" onclick="openMusicDetails('${item.id}')">
+                    <img src="${item.poster_path}" alt="${item.title}" class="card-img">
+                    <p class="card-title">${item.title} - ${item.artist}</p>
+                </div>
+            `).join('');
         } else {
             grid.innerHTML = `<p class="loading-text">Loaded ${data.length || 0} items for ${category}.</p>`;
         }
     } catch (error) {
         grid.innerHTML = `<p class="loading-text" style="color: var(--brand-red);">Error connecting to Vercel API function.</p>`;
     }
+}
+
+function openMusicDetails(trackId) {
+    activeMediaId = trackId;
+    const track = currentMediaData.find(m => m.id == trackId);
+    if (!track) return;
+
+    document.getElementById('detailTitle').innerText = track.title;
+    document.getElementById('detailOverview').innerText = `Artist: ${track.artist}\nStreamable track via Jamendo Music. Click listen to start playback.`;
+    document.getElementById('detailPoster').src = track.poster_path;
+    
+    const actionArea = document.getElementById('actionArea');
+    actionArea.innerHTML = `<button class="watch-btn" onclick="playJamendoTrack('${track.audio_url}')">Listen</button>`;
+
+    document.getElementById('detailsModal').style.display = 'flex';
+}
+
+function playJamendoTrack(audioUrl) {
+    const modal = document.getElementById('playerModal');
+    const container = modal.querySelector('.player-frame-container');
+    container.innerHTML = `
+        <button class="close-player-btn" onclick="closePlayer()">Close</button>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 20px;">
+            <h2 style="color: #fff;">Now Playing Audio</h2>
+            <audio controls autoplay style="width: 80%;">
+                <source src="${audioUrl}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+    `;
+    modal.style.display = 'flex';
 }
 
 function openDetailsModal(tmdbId) {
@@ -232,13 +311,21 @@ const searchInput = document.getElementById('searchInput');
 if (searchBtn && searchInput) {
     searchBtn.addEventListener('click', () => {
         const query = searchInput.value;
-        fetchCategoryData(currentCategory, query);
+        if (currentCategory === 'music') {
+            fetchMusicData(currentMusicProvider, query);
+        } else {
+            fetchCategoryData(currentCategory, query);
+        }
     });
 
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             const query = searchInput.value;
-            fetchCategoryData(currentCategory, query);
+            if (currentCategory === 'music') {
+                fetchMusicData(currentMusicProvider, query);
+            } else {
+                fetchCategoryData(currentCategory, query);
+            }
         }
     });
 }
