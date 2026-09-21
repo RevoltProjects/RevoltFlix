@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, id=device-width, initial-scale=1.0">
     <title>RevoltFlix - Browse</title>
     <link rel="stylesheet" href="../css/view.css">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -24,7 +24,7 @@
                     <i data-lucide="tv"></i> Series
                 </button>
                 <button class="nav-item" data-category="youtube">
-                    <i data-lucide="youtube"></i> YouTube
+                    <i data-lucide="monitor-play"></i> YouTube
                 </button>
                 <button class="nav-item" data-category="music">
                     <i data-lucide="music"></i> Music
@@ -83,6 +83,22 @@
         </div>
     </div>
 
+    <div id="audioDock" class="audio-dock">
+        <div class="audio-dock-info">
+            <img id="dockThumb" src="" alt="" class="dock-thumb">
+            <div class="dock-text">
+                <p id="dockTitle" class="dock-title">Not Playing</p>
+                <p id="dockArtist" class="dock-artist">-</p>
+            </div>
+        </div>
+        <div class="audio-dock-controls">
+            <button class="dock-ctrl-btn" onclick="togglePlayState()"><i id="dockPlayIcon" data-lucide="play"></i></button>
+            <button class="dock-ctrl-btn" onclick="toggleLoopState()"><i data-lucide="repeat" id="dockLoopIcon"></i></button>
+        </div>
+        <audio id="globalAudioElement"></audio>
+    </div>
+
+    <script src="../js/dock.js"></script>
     <script src="../js/view.js"></script>
 </body>
 </html>
