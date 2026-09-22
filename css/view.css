@@ -1,17 +1,20 @@
 :root {
     --brand-red: #e50914;
+    --brand-red-hover: #f40612;
     --bg-dark: #0b0b0b;
     --panel-dark: #141414;
-    --spotify-grey: #181818;
-    --spotify-light-grey: #282828;
+    --card-bg: #161616;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
 }
 
 body {
     margin: 0;
     padding: 0;
     background-color: var(--bg-dark);
-    color: #fff;
-    font-family: sans-serif;
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 .app-container {
@@ -22,8 +25,8 @@ body {
 
 .sidebar {
     width: 250px;
-    background: #000;
-    border-right: 1px solid #222;
+    background: #000000;
+    border-right: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
@@ -37,7 +40,7 @@ body {
     margin: 0;
     font-size: 1.6rem;
     font-family: 'Bebas Neue', sans-serif;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
 }
 
 .sidebar-nav {
@@ -50,7 +53,7 @@ body {
 .nav-item {
     background: transparent;
     border: none;
-    color: #a0a0a0;
+    color: var(--text-secondary);
     padding: 14px 16px;
     text-align: left;
     font-size: 0.95rem;
@@ -72,13 +75,13 @@ body {
 .nav-item.active {
     background: var(--brand-red);
     color: #fff;
-    box-shadow: 0 4px 12px rgba(229, 9, 20, 0.35);
+    box-shadow: 0 4px 14px rgba(229, 9, 20, 0.4);
 }
 
 .sidebar-profile-container {
     margin-top: auto;
     padding: 15px 20px;
-    border-top: 1px solid #222;
+    border-top: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -98,14 +101,14 @@ body {
 
 .switch-account-btn {
     background: transparent;
-    border: 1px solid #333;
-    color: #aaa;
-    padding: 6px 12px;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 8px 12px;
     border-radius: 6px;
     font-size: 0.8rem;
     cursor: pointer;
     text-align: center;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
 }
 
 .switch-account-btn:hover {
@@ -131,8 +134,8 @@ body {
 
 .rounded-switcher-btn {
     background: #1e1e1e;
-    border: 1px solid #333;
-    color: #aaa;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
     padding: 8px 20px;
     border-radius: 20px;
     cursor: pointer;
@@ -163,7 +166,7 @@ body {
     padding: 12px 18px;
     width: 350px;
     background: var(--panel-dark);
-    border: 1px solid #333;
+    border: 1px solid var(--border-subtle);
     color: #fff;
     border-radius: 30px;
     outline: none;
@@ -173,7 +176,7 @@ body {
 
 #searchInput:focus {
     border-color: var(--brand-red);
-    box-shadow: 0 0 10px rgba(229, 9, 20, 0.3);
+    box-shadow: 0 0 12px rgba(229, 9, 20, 0.3);
 }
 
 #searchBtn {
@@ -184,10 +187,11 @@ body {
     border-radius: 30px;
     cursor: pointer;
     font-weight: 600;
+    transition: background 0.2s ease;
 }
 
 #searchBtn:hover {
-    background: #f40612;
+    background: var(--brand-red-hover);
 }
 
 .content-grid {
@@ -200,27 +204,48 @@ body {
     padding-bottom: 60px;
 }
 
+.content-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.content-grid::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+}
+
+.content-grid::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+.content-grid::-webkit-scrollbar-thumb:hover {
+    background: var(--brand-red);
+}
+
 .movie-card {
-    background: #1a1a1a;
-    border-radius: 12px;
+    background: var(--card-bg);
+    border-radius: 14px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     cursor: pointer;
-    transition: transform 0.3s ease, background 0.3s, box-shadow 0.3s;
+    position: relative;
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
 .movie-card:hover {
-    background: #2a2a2a;
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.8);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.85), 0 0 20px rgba(229, 9, 20, 0.25);
+    border-color: rgba(229, 9, 20, 0.6);
 }
 
 .card-img-wrapper {
     position: relative;
     width: 100%;
     aspect-ratio: 2 / 3;
-    background: #1a1a1a;
+    background: #111;
     overflow: hidden;
 }
 
@@ -229,50 +254,125 @@ body {
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.5s ease;
+}
+
+.movie-card:hover .card-img {
+    transform: scale(1.06);
+}
+
+.card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%);
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+}
+
+.movie-card:hover .card-overlay {
+    opacity: 1;
+}
+
+.play-icon-badge {
+    width: 52px;
+    height: 52px;
+    background: rgba(229, 9, 20, 0.92);
+    backdrop-filter: blur(8px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+    transform: scale(0.8);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.movie-card:hover .play-icon-badge {
+    transform: scale(1);
+}
+
+.play-icon-badge::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 8px 0 8px 14px;
+    border-color: transparent transparent transparent #ffffff;
+    margin-left: 3px;
+}
+
+.card-meta-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.card-details {
+    padding: 14px 16px;
+    background: var(--card-bg);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .card-title {
-    padding: 16px 12px;
-    font-size: 1.1rem;
-    font-weight: 500;
-    text-align: center;
+    font-size: 1.05rem;
+    font-weight: 600;
     color: #fff;
     margin: 0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    background: #1a1a1a;
 }
 
-.movie-card:hover .card-title {
-    background: #2a2a2a;
+.card-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .music-track-row {
     display: flex;
     align-items: center;
     padding: 10px 15px;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     transition: background 0.2s;
     gap: 15px;
 }
 
 .music-track-row:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .track-number {
-    color: #aaa;
+    color: var(--text-secondary);
     width: 20px;
     text-align: right;
     font-size: 0.9rem;
 }
 
 .track-cover {
-    width: 40px;
-    height: 40px;
-    border-radius: 4px;
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
     object-fit: cover;
 }
 
@@ -293,12 +393,15 @@ body {
 .track-artist {
     margin: 0;
     font-size: 0.85rem;
-    color: #aaa;
+    color: var(--text-secondary);
 }
 
 .loading-text {
-    color: #777;
-    font-size: 1rem;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 0;
 }
 
 .details-modal, .player-modal {
@@ -308,7 +411,8 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(8px);
     justify-content: center;
     align-items: center;
     z-index: 900;
@@ -321,17 +425,18 @@ body {
 }
 
 .close-details {
-    background: transparent;
-    border: 1px solid #333;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
     color: #fff;
-    padding: 8px 16px;
+    padding: 8px 18px;
     border-radius: 20px;
     cursor: pointer;
     margin-bottom: 20px;
+    transition: all 0.2s ease;
 }
 
 .close-details:hover {
-    background: #222;
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .details-box {
@@ -339,18 +444,20 @@ body {
     gap: 30px;
     background: var(--panel-dark);
     padding: 30px;
-    border-radius: 12px;
-    border: 1px solid #222;
+    border-radius: 16px;
+    border: 1px solid var(--border-subtle);
     max-height: 75vh;
     overflow-y: auto;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
 }
 
 .poster-img {
     width: 300px;
     height: 450px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 12px;
     flex-shrink: 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
 .info-box {
@@ -361,31 +468,35 @@ body {
 
 .movie-title {
     margin-top: 0;
-    font-size: 1.8rem;
-    margin-bottom: 10px;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
 }
 
 .movie-overview {
-    color: #aaa;
-    line-height: 1.5;
-    font-size: 0.95rem;
-    margin-bottom: 20px;
+    color: #ccc;
+    line-height: 1.6;
+    font-size: 0.98rem;
+    margin-bottom: 25px;
 }
 
 .watch-btn {
-    padding: 12px 24px;
+    padding: 14px 28px;
     background: var(--brand-red);
     color: white;
     border: none;
     border-radius: 30px;
     font-size: 1rem;
-    font-weight: bold;
+    font-weight: 700;
     cursor: pointer;
     width: fit-content;
+    box-shadow: 0 6px 18px rgba(229, 9, 20, 0.4);
+    transition: all 0.2s ease;
 }
 
 .watch-btn:hover {
-    background: #f40612;
+    background: var(--brand-red-hover);
+    transform: scale(1.03);
 }
 
 .player-frame-container {
@@ -402,7 +513,7 @@ body {
     color: white;
     border: none;
     padding: 8px 16px;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
 }
@@ -411,7 +522,7 @@ body {
     width: 100%;
     height: 100%;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
 }
 
 .audio-dock {
@@ -420,8 +531,8 @@ body {
     left: 0;
     width: 100%;
     height: 90px;
-    background: var(--spotify-grey);
-    border-top: 1px solid var(--spotify-light-grey);
+    background: #181818;
+    border-top: 1px solid #282828;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -441,7 +552,7 @@ body {
     width: 56px;
     height: 56px;
     object-fit: cover;
-    border-radius: 4px;
+    border-radius: 6px;
 }
 
 .dock-text {
@@ -497,17 +608,9 @@ body {
 .dock-ctrl-btn.play-btn {
     background: #fff;
     color: #000;
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
-}
-
-.dock-ctrl-btn.play-btn:hover {
-    transform: scale(1.05);
-}
-
-.dock-ctrl-btn.active-loop, .dock-ctrl-btn.active-shuffle {
-    color: var(--brand-red);
 }
 
 .audio-progress {
@@ -540,19 +643,6 @@ body {
 }
 
 .progress-slider:hover::-webkit-slider-thumb {
-    display: block;
-}
-
-.progress-slider::-moz-range-thumb {
-    width: 12px;
-    height: 12px;
-    background: #fff;
-    border: none;
-    border-radius: 50%;
-    display: none;
-}
-
-.progress-slider:hover::-moz-range-thumb {
     display: block;
 }
 
