@@ -247,6 +247,7 @@ body {
     aspect-ratio: 2 / 3;
     background: #111;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .card-img {
@@ -327,6 +328,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    flex-grow: 1;
 }
 
 .card-title {
