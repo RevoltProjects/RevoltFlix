@@ -95,6 +95,20 @@ async function fetchMusicData(provider, query = '') {
     fetchCategoryData('jamendo', query);
 }
 
+function resolveImageUrl(item, fallbackCategory = 'movie') {
+    const rawImage = item.poster_path || item.poster || item.thumbnail || item.image || item.album_image || item.backdrop_path;
+    
+    if (!rawImage) {
+        return 'https://via.placeholder.com/500x750/141414/ffffff?text=No+Image';
+    }
+    
+    if (rawImage.startsWith('http://') || rawImage.startsWith('https://')) {
+        return rawImage;
+    }
+    
+    return `https://image.tmdb.org/t/p/w500${rawImage.startsWith('/') ? '' : '/'}${rawImage}`;
+}
+
 async function fetchCategoryData(category, query = '') {
     const grid = document.getElementById('contentGrid');
 
@@ -128,23 +142,23 @@ async function fetchCategoryData(category, query = '') {
         const data = await response.json();
         currentMediaData = data;
 
-        if (data.length === 0) {
+        if (!data || data.length === 0) {
             grid.innerHTML = `<p class="loading-text">No results found.</p>`;
             return;
         }
 
         if (category === 'movies' || category === 'series') {
             grid.innerHTML = data.map(item => {
-                const title = item.title || item.name || '';
+                const title = item.title || item.name || 'Untitled';
                 const date = item.release_date || item.first_air_date || '';
                 const year = date ? date.split('-')[0] : '';
-                const poster = item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Poster';
+                const posterUrl = resolveImageUrl(item, 'movie');
                 const tag = category === 'series' ? 'SERIES' : 'MOVIE';
 
                 return `
                     <div class="movie-card" onclick="openDetailsModal(${item.id})">
                         <div class="card-img-wrapper">
-                            <img src="${poster}" alt="${title.replace(/"/g, '&quot;')}" class="card-img" loading="lazy">
+                            <img src="${posterUrl}" alt="${title.replace(/"/g, '&quot;')}" class="card-img" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/500x750/141414/ffffff?text=Image+Unavailable';">
                             <span class="card-meta-badge">${tag}</span>
                             <div class="card-overlay">
                                 <div class="play-icon-badge"></div>
@@ -158,31 +172,38 @@ async function fetchCategoryData(category, query = '') {
                 `;
             }).join('');
         } else if (category === 'youtube') {
-            grid.innerHTML = data.map(item => `
-                <div class="movie-card" onclick="playYouTubeVideo('${item.id}')">
-                    <div class="card-img-wrapper">
-                        <img src="${item.poster_path}" alt="${(item.title || '').replace(/"/g, '&quot;')}" class="card-img" loading="lazy">
-                        <span class="card-meta-badge">VIDEO</span>
-                        <div class="card-overlay">
-                            <div class="play-icon-badge"></div>
+            grid.innerHTML = data.map(item => {
+                const title = item.title || 'YouTube Video';
+                const posterUrl = resolveImageUrl(item, 'youtube');
+
+                return `
+                    <div class="movie-card" onclick="playYouTubeVideo('${item.id}')">
+                        <div class="card-img-wrapper">
+                            <img src="${posterUrl}" alt="${title.replace(/"/g, '&quot;')}" class="card-img" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/500x750/141414/ffffff?text=Video+Thumbnail';">
+                            <span class="card-meta-badge">VIDEO</span>
+                            <div class="card-overlay">
+                                <div class="play-icon-badge"></div>
+                            </div>
+                        </div>
+                        <div class="card-details">
+                            <p class="card-title">${title}</p>
                         </div>
                     </div>
-                    <div class="card-details">
-                        <p class="card-title">${item.title}</p>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         } else if (category === 'jamendo') {
             grid.innerHTML = data.map((item, index) => {
-                const safeTitle = (item.title || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                const safeArtist = (item.artist || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const safeTitle = (item.title || 'Unknown Title').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const safeArtist = (item.artist || 'Unknown Artist').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const coverUrl = resolveImageUrl(item, 'music');
+
                 return `
-                    <div class="music-track-row" onclick="playJamendoTrack('${item.audio_url}', '${safeTitle}', '${safeArtist}', '${item.poster_path}')">
+                    <div class="music-track-row" onclick="playJamendoTrack('${item.audio_url}', '${safeTitle}', '${safeArtist}', '${coverUrl}')">
                         <span class="track-number">${index + 1}</span>
-                        <img src="${item.poster_path}" alt="Cover" class="track-cover">
+                        <img src="${coverUrl}" alt="Cover" class="track-cover" onerror="this.onerror=null;this.src='https://via.placeholder.com/100x100/141414/ffffff?text=Music';">
                         <div class="track-info">
-                            <p class="track-title">${item.title}</p>
-                            <p class="track-artist">${item.artist}</p>
+                            <p class="track-title">${item.title || 'Unknown Title'}</p>
+                            <p class="track-artist">${item.artist || 'Unknown Artist'}</p>
                         </div>
                     </div>
                 `;
@@ -200,9 +221,9 @@ function openDetailsModal(tmdbId) {
     const media = currentMediaData.find(m => m.id == tmdbId);
     if (!media) return;
 
-    document.getElementById('detailTitle').innerText = media.title || media.name;
+    document.getElementById('detailTitle').innerText = media.title || media.name || 'Untitled';
     document.getElementById('detailOverview').innerText = media.overview || "No description available for this title.";
-    document.getElementById('detailPoster').src = `https://image.tmdb.org/t/p/w500${media.poster_path}`;
+    document.getElementById('detailPoster').src = resolveImageUrl(media, 'movie');
     
     const actionArea = document.getElementById('actionArea');
 
@@ -239,7 +260,7 @@ function playSeriesEpisode(season, episode) {
 
 function playYouTubeVideo(videoId) {
     const video = currentMediaData.find(m => m.id === videoId);
-    const title = video ? video.title : "YouTube Video";
+    const title = video ? (video.title || "YouTube Video") : "YouTube Video";
     
     const modal = document.getElementById('playerModal');
     const container = modal.querySelector('.player-frame-container');
