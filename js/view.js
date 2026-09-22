@@ -59,8 +59,9 @@ navItems.forEach(item => {
             switcherContainer.style.display = 'none';
             searchInput.placeholder = `Search ${currentCategory}...`;
             grid.style.display = 'grid';
-            grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
-            grid.style.gap = '20px';
+            grid.style.flexDirection = '';
+            grid.style.gridTemplateColumns = '';
+            grid.style.gap = '';
             fetchCategoryData(currentCategory);
         }
     });
