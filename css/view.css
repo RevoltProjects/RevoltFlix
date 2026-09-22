@@ -192,8 +192,8 @@ body {
 
 .content-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Increased for large posters */
-    gap: 30px; /* Increased gap */
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
     overflow-y: auto;
     max-height: 70vh;
     padding-right: 10px;
@@ -229,8 +229,8 @@ body {
 }
 
 .card-title {
-    padding: 16px 12px; 
-    font-size: 1.2rem; 
+    padding: 16px 12px;
+    font-size: 1.2rem;
     font-weight: 500;
     text-align: center;
     color: #fff;
@@ -343,8 +343,8 @@ body {
 }
 
 .poster-img {
-    width: 300px; /* Increased poster width in details */
-    height: 450px; /* Increased poster height in details */
+    width: 300px;
+    height: 450px;
     object-fit: cover;
     border-radius: 8px;
     flex-shrink: 0;
