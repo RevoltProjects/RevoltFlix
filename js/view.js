@@ -11,7 +11,7 @@ firebase.initializeApp(firebaseConfig);
 
 const activeProfile = localStorage.getItem('activeProfile');
 if (!activeProfile) {
-    window.location.href = "html/watching.html";
+    window.location.href = "watching.html";
 } else {
     const profile = JSON.parse(activeProfile);
     document.getElementById('profileBadge').innerText = profile.name;
@@ -21,7 +21,7 @@ lucide.createIcons();
 
 function switchToProfileSelect() {
     localStorage.removeItem('activeProfile');
-    window.location.href = "html/watching.html";
+    window.location.href = "watching.html";
 }
 
 let currentCategory = 'movies';
