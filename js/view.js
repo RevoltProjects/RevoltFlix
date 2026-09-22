@@ -134,21 +134,42 @@ async function fetchCategoryData(category, query = '') {
         }
 
         if (category === 'movies' || category === 'series') {
-            grid.innerHTML = data.map(item => `
-                <div class="movie-card" onclick="openDetailsModal(${item.id})">
-                    <div class="card-img-wrapper">
-                        <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${(item.title || item.name || '').replace(/"/g, '&quot;')}" class="card-img">
+            grid.innerHTML = data.map(item => {
+                const title = item.title || item.name || '';
+                const date = item.release_date || item.first_air_date || '';
+                const year = date ? date.split('-')[0] : '';
+                const poster = item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Poster';
+                const tag = category === 'series' ? 'SERIES' : 'MOVIE';
+
+                return `
+                    <div class="movie-card" onclick="openDetailsModal(${item.id})">
+                        <div class="card-img-wrapper">
+                            <img src="${poster}" alt="${title.replace(/"/g, '&quot;')}" class="card-img" loading="lazy">
+                            <span class="card-meta-badge">${tag}</span>
+                            <div class="card-overlay">
+                                <div class="play-icon-badge"></div>
+                            </div>
+                        </div>
+                        <div class="card-details">
+                            <p class="card-title">${title}</p>
+                            ${year ? `<p class="card-subtitle"><span>${year}</span></p>` : ''}
+                        </div>
                     </div>
-                    <p class="card-title">${item.title || item.name}</p>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         } else if (category === 'youtube') {
             grid.innerHTML = data.map(item => `
                 <div class="movie-card" onclick="playYouTubeVideo('${item.id}')">
                     <div class="card-img-wrapper">
-                        <img src="${item.poster_path}" alt="${(item.title || '').replace(/"/g, '&quot;')}" class="card-img">
+                        <img src="${item.poster_path}" alt="${(item.title || '').replace(/"/g, '&quot;')}" class="card-img" loading="lazy">
+                        <span class="card-meta-badge">VIDEO</span>
+                        <div class="card-overlay">
+                            <div class="play-icon-badge"></div>
+                        </div>
                     </div>
-                    <p class="card-title">${item.title}</p>
+                    <div class="card-details">
+                        <p class="card-title">${item.title}</p>
+                    </div>
                 </div>
             `).join('');
         } else if (category === 'jamendo') {
@@ -186,7 +207,7 @@ function openDetailsModal(tmdbId) {
     const actionArea = document.getElementById('actionArea');
 
     if (currentCategory === 'movies') {
-        actionArea.innerHTML = `<button class="watch-btn" onclick="playMovie()">Watch</button>`;
+        actionArea.innerHTML = `<button class="watch-btn" onclick="playMovie()">Watch Movie</button>`;
     } else if (currentCategory === 'series') {
         actionArea.innerHTML = `<button class="watch-btn" onclick="playSeriesEpisode(1, 1)">Watch S1 E1</button>`;
     }
