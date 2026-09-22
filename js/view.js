@@ -14,7 +14,8 @@ if (!activeProfile) {
     window.location.href = "watching.html";
 } else {
     const profile = JSON.parse(activeProfile);
-    document.getElementById('profileBadge').innerText = profile.name;
+    const profileBadge = document.getElementById('profileBadge');
+    if (profileBadge) profileBadge.innerText = profile.name;
 }
 
 lucide.createIcons();
@@ -36,10 +37,12 @@ navItems.forEach(item => {
         currentCategory = item.getAttribute('data-category');
         
         const categoryTitleElement = document.getElementById('categoryTitle');
-        if (currentCategory === 'youtube') {
-            categoryTitleElement.innerHTML = '<span style="color:var(--brand-red);">Revolt</span>Tube';
-        } else {
-            categoryTitleElement.innerText = item.innerText.trim();
+        if (categoryTitleElement) {
+            if (currentCategory === 'youtube') {
+                categoryTitleElement.innerHTML = '<span style="color:var(--brand-red);">Revolt</span>Tube';
+            } else {
+                categoryTitleElement.innerText = item.innerText.trim();
+            }
         }
 
         const switcherContainer = document.getElementById('musicSwitcherContainer');
@@ -47,21 +50,25 @@ navItems.forEach(item => {
         const grid = document.getElementById('contentGrid');
 
         if (currentCategory === 'music') {
-            audioDock.style.display = 'flex';
-            switcherContainer.style.display = 'flex';
-            searchInput.placeholder = "Search music...";
-            grid.style.display = 'flex';
-            grid.style.flexDirection = 'column';
-            grid.style.gap = '8px';
+            if (audioDock) audioDock.style.display = 'flex';
+            if (switcherContainer) switcherContainer.style.display = 'flex';
+            if (searchInput) searchInput.placeholder = "Search music...";
+            if (grid) {
+                grid.style.display = 'flex';
+                grid.style.flexDirection = 'column';
+                grid.style.gap = '8px';
+            }
             fetchMusicData('jamendo');
         } else {
-            audioDock.style.display = 'none';
-            switcherContainer.style.display = 'none';
-            searchInput.placeholder = `Search ${currentCategory}...`;
-            grid.style.display = 'grid';
-            grid.style.flexDirection = '';
-            grid.style.gridTemplateColumns = '';
-            grid.style.gap = '';
+            if (audioDock) audioDock.style.display = 'none';
+            if (switcherContainer) switcherContainer.style.display = 'none';
+            if (searchInput) searchInput.placeholder = `Search ${currentCategory}...`;
+            if (grid) {
+                grid.style.display = 'grid';
+                grid.style.flexDirection = '';
+                grid.style.gridTemplateColumns = '';
+                grid.style.gap = '';
+            }
             fetchCategoryData(currentCategory);
         }
     });
@@ -86,6 +93,7 @@ function switchMusicProvider(provider) {
 
 async function fetchMusicData(provider, query = '') {
     const grid = document.getElementById('contentGrid');
+    if (!grid) return;
 
     if (provider === 'deezer') {
         grid.innerHTML = `<p class="loading-text">No data available for Deezer yet.</p>`;
@@ -95,22 +103,26 @@ async function fetchMusicData(provider, query = '') {
     fetchCategoryData('jamendo', query);
 }
 
-function resolveImageUrl(item, fallbackCategory = 'movie') {
+function resolveImageUrl(item) {
+    if (!item) return 'https://via.placeholder.com/500x750/141414/ffffff?text=No+Image';
+
     const rawImage = item.poster_path || item.poster || item.thumbnail || item.image || item.album_image || item.backdrop_path;
     
-    if (!rawImage) {
-        return 'https://via.placeholder.com/500x750/141414/ffffff?text=No+Image';
+    if (!rawImage || rawImage === 'null' || rawImage === 'undefined') {
+        return 'https://via.placeholder.com/500x750/141414/ffffff?text=No+Poster';
     }
     
-    if (rawImage.startsWith('http://') || rawImage.startsWith('https://')) {
+    if (typeof rawImage === 'string' && (rawImage.startsWith('http://') || rawImage.startsWith('https://'))) {
         return rawImage;
     }
     
-    return `https://image.tmdb.org/t/p/w500${rawImage.startsWith('/') ? '' : '/'}${rawImage}`;
+    const cleanPath = String(rawImage).startsWith('/') ? rawImage : `/${rawImage}`;
+    return `https://image.tmdb.org/t/p/w500${cleanPath}`;
 }
 
 async function fetchCategoryData(category, query = '') {
     const grid = document.getElementById('contentGrid');
+    if (!grid) return;
 
     if (category === 'youtube' && !query) {
         grid.innerHTML = `
@@ -137,12 +149,17 @@ async function fetchCategoryData(category, query = '') {
         }
 
         const response = await fetch(endpoint);
-        if (!response.ok) throw new Error("Failed to fetch data from backend.");
-        
         const data = await response.json();
+
+        if (!Array.isArray(data)) {
+            console.error("Backend returned an error or non-array object:", data);
+            grid.innerHTML = `<p class="loading-text" style="color: var(--brand-red);">Backend Error: ${data.error || 'Invalid API Key or Route'}</p>`;
+            return;
+        }
+
         currentMediaData = data;
 
-        if (!data || data.length === 0) {
+        if (data.length === 0) {
             grid.innerHTML = `<p class="loading-text">No results found.</p>`;
             return;
         }
@@ -152,7 +169,7 @@ async function fetchCategoryData(category, query = '') {
                 const title = item.title || item.name || 'Untitled';
                 const date = item.release_date || item.first_air_date || '';
                 const year = date ? date.split('-')[0] : '';
-                const posterUrl = resolveImageUrl(item, 'movie');
+                const posterUrl = resolveImageUrl(item);
                 const tag = category === 'series' ? 'SERIES' : 'MOVIE';
 
                 return `
@@ -174,7 +191,7 @@ async function fetchCategoryData(category, query = '') {
         } else if (category === 'youtube') {
             grid.innerHTML = data.map(item => {
                 const title = item.title || 'YouTube Video';
-                const posterUrl = resolveImageUrl(item, 'youtube');
+                const posterUrl = resolveImageUrl(item);
 
                 return `
                     <div class="movie-card" onclick="playYouTubeVideo('${item.id}')">
@@ -195,7 +212,7 @@ async function fetchCategoryData(category, query = '') {
             grid.innerHTML = data.map((item, index) => {
                 const safeTitle = (item.title || 'Unknown Title').replace(/'/g, "\\'").replace(/"/g, '&quot;');
                 const safeArtist = (item.artist || 'Unknown Artist').replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                const coverUrl = resolveImageUrl(item, 'music');
+                const coverUrl = resolveImageUrl(item);
 
                 return `
                     <div class="music-track-row" onclick="playJamendoTrack('${item.audio_url}', '${safeTitle}', '${safeArtist}', '${coverUrl}')">
@@ -212,6 +229,7 @@ async function fetchCategoryData(category, query = '') {
             grid.innerHTML = `<p class="loading-text">Loaded ${data.length || 0} items for ${category}.</p>`;
         }
     } catch (error) {
+        console.error("Fetch failed:", error);
         grid.innerHTML = `<p class="loading-text" style="color: var(--brand-red);">Error connecting to API.</p>`;
     }
 }
@@ -221,25 +239,33 @@ function openDetailsModal(tmdbId) {
     const media = currentMediaData.find(m => m.id == tmdbId);
     if (!media) return;
 
-    document.getElementById('detailTitle').innerText = media.title || media.name || 'Untitled';
-    document.getElementById('detailOverview').innerText = media.overview || "No description available for this title.";
-    document.getElementById('detailPoster').src = resolveImageUrl(media, 'movie');
-    
+    const detailTitle = document.getElementById('detailTitle');
+    const detailOverview = document.getElementById('detailOverview');
+    const detailPoster = document.getElementById('detailPoster');
+    const detailsModal = document.getElementById('detailsModal');
     const actionArea = document.getElementById('actionArea');
 
-    if (currentCategory === 'movies') {
-        actionArea.innerHTML = `<button class="watch-btn" onclick="playMovie()">Watch Movie</button>`;
-    } else if (currentCategory === 'series') {
-        actionArea.innerHTML = `<button class="watch-btn" onclick="playSeriesEpisode(1, 1)">Watch S1 E1</button>`;
+    if (detailTitle) detailTitle.innerText = media.title || media.name || 'Untitled';
+    if (detailOverview) detailOverview.innerText = media.overview || "No description available for this title.";
+    if (detailPoster) detailPoster.src = resolveImageUrl(media);
+    
+    if (actionArea) {
+        if (currentCategory === 'movies') {
+            actionArea.innerHTML = `<button class="watch-btn" onclick="playMovie()">Watch Movie</button>`;
+        } else if (currentCategory === 'series') {
+            actionArea.innerHTML = `<button class="watch-btn" onclick="playSeriesEpisode(1, 1)">Watch S1 E1</button>`;
+        }
     }
 
-    document.getElementById('detailsModal').style.display = 'flex';
+    if (detailsModal) detailsModal.style.display = 'flex';
 }
 
 function playMovie() {
     if (!activeMediaId) return;
     const modal = document.getElementById('playerModal');
+    if (!modal) return;
     const container = modal.querySelector('.player-frame-container');
+    if (!container) return;
     container.innerHTML = `
         <button class="close-player-btn" onclick="closePlayer()">Close</button>
         <iframe id="videoPlayer" class="video-iframe" src="https://vidsrc.sbs/embed/movie/${activeMediaId}" sandbox="allow-scripts allow-same-origin allow-presentation" allowfullscreen></iframe>
@@ -250,7 +276,9 @@ function playMovie() {
 function playSeriesEpisode(season, episode) {
     if (!activeMediaId) return;
     const modal = document.getElementById('playerModal');
+    if (!modal) return;
     const container = modal.querySelector('.player-frame-container');
+    if (!container) return;
     container.innerHTML = `
         <button class="close-player-btn" onclick="closePlayer()">Close</button>
         <iframe id="videoPlayer" class="video-iframe" src="https://vidsrc.sbs/embed/tv/${activeMediaId}/${season}/${episode}" sandbox="allow-scripts allow-same-origin allow-presentation" allowfullscreen></iframe>
@@ -263,7 +291,9 @@ function playYouTubeVideo(videoId) {
     const title = video ? (video.title || "YouTube Video") : "YouTube Video";
     
     const modal = document.getElementById('playerModal');
+    if (!modal) return;
     const container = modal.querySelector('.player-frame-container');
+    if (!container) return;
     
     container.innerHTML = `
         <button class="close-player-btn" onclick="closePlayer()">Close</button>
@@ -280,11 +310,13 @@ function playYouTubeVideo(videoId) {
 }
 
 function closeDetailsModal() {
-    document.getElementById('detailsModal').style.display = 'none';
+    const detailsModal = document.getElementById('detailsModal');
+    if (detailsModal) detailsModal.style.display = 'none';
 }
 
 function closePlayer() {
-    document.getElementById('playerModal').style.display = 'none';
+    const playerModal = document.getElementById('playerModal');
+    if (playerModal) playerModal.style.display = 'none';
 }
 
 const searchBtn = document.getElementById('searchBtn');
